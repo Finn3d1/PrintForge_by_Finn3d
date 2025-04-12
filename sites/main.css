@@ -1,0 +1,42 @@
+
+main {
+    background-color: rgb(245, 245, 245);
+    text-align: center;
+}
+
+.button {
+    background-color: #2b9fc8;
+    border-top-left-radius: 0%;
+	border-top-right-radius: 0%;
+	border-bottom-left-radius: 0%;
+	border-bottom-right-radius: 54%;
+    border: 0px;
+    font-size: 30px;
+}
+
+.button:hover {
+    background-color: #308eb1;
+    border-top-left-radius: 0%;
+	border-top-right-radius: 0%;
+	border-bottom-left-radius: 0%;
+	border-bottom-right-radius: 54%;
+    border: 0px;
+    font-size: 31px;
+}
+
+.boarderb {
+    border-color:darkgrey;
+    border-width: 2px;
+    border-style: solid;
+    height: auto; 
+    width: auto ;
+    max-width:30%;
+    max-height:80%;
+    margin-right: 10px;
+    display: inline-block;
+
+
+    
+}
+
+

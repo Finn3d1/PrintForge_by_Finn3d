@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintCloud</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="icon" type="image/x-icon" href="picture/logo.png">
+</head>
+<body>
+    <script src="js/index.js"></script-->
+    <script src="js/languare.js"></script>
+    <header>
+        <div class="headerb2">
+            <select class="headerb" id="lang" onchange="languare()">
+                <option selected>Deutsch</option>
+                <option>Englisch</option>
+            </select>
+            <form class="headerb" action="modells">
+                <input name="search"  placeholder="Search..." type="search">
+            </form>
+            <a class="headerb" href="login">
+                <img class="aimg" src="/picture/accounnt.png" alt="">
+            </a>
+            <a href="cratemodell">
+                <button class="headerb">Erstellen</button>
+            </a>
+            
+        </div>  
+        <div class="headera2">
+            <a class="headera" id="home" href="/">Home</a>
+            <a class="headera" id="comunity" href="comunity">Comunity</a>
+            <a class="headera" id="modells" href="modells">Modells</a>
+        </div>    
+    </header>
+    <main>
+        <section id="info">
+
+            <h2 id="Hello">Welcomme to PrintCloud</h2>
+            <br>
+            <h3 id="Hello2">The best side for 3d Printing 3d Modells</h3>
+        </section>
+        <section id="bestmodell">
+            <h3 id="efm">Featured Models</h3>
+            <div id="model-list-1">
+                <% models.slice(0, 4).forEach(model => { %>
+                  <div class="boarderb">
+                    <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
+                      style="object-fit: contain; background-color: white;"><br>
+                    <strong><%= model.name %></strong>
+                    <p><%= model.description %></p><br>
+                    <a href="/models/file/<%= model.dataFile %>" download>Download Datei</a>
+                    <p>10👍</p><p>10⬇️</p>
+                  </div>
+                <% }); %>
+              </div>
+            
+    
+        </section>
+        <br>
+        <section>
+            <a href="modells">
+                <button class="button" id="Explorebutton">Explore Modells</button>
+            </a>
+            
+        </section>
+        <section>
+            <h3>Best Creators</h3>
+            <div>
+                
+            </div>
+        </section>
+        <section style="background-color: white;">
+            <h3 id="newmodells">New Modells</h3>
+            <div id="model-list-2">
+                <% models.slice().reverse().slice(0, 4).forEach(model => { %>
+                  <div class="boarderb">
+                    <a href="/modelldet">
+                        <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
+                            style="object-fit: contain; background-color: white;">
+                    </a>
+                      <br>
+                    <strong><%= model.name %></strong>
+                    <p><%= model.description %></p><br>
+                    <a href="/models/file/<%= model.dataFile %>" download>Download Datei</a>
+                    <p>10👍</p><p>10⬇️</p>
+                  </div>
+                <% }); %>
+                <!-- Neuste Modelle -->
+              </div>
+        </section>
+    </main>
+</body>
+</html>

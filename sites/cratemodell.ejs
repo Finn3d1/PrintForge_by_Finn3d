@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintCloud</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="icon" type="image/x-icon" href="picture/logo.png">
+</head>
+<body>
+    <!--script src="js/index.js"></script-->
+    <script src="js/languare.js"></script>
+    <header>
+        <div class="headerb2">
+            <select class="headerb" id="lang" onchange="languare()">
+                <option selected>Deutsch</option>
+                <option>Englisch</option>
+            </select>
+            <form class="headerb" action="modells.html">
+                <input name="search"  placeholder="Search..." type="search">
+            </form>
+            <a class="headerb" href="login">
+                <img class="aimg" src="/picture/accounnt.png" alt="">
+            </a>
+            <a href="cratemodell">
+                <button class="headerb">Erstellen</button>
+            </a>
+            
+        </div>  
+        <div class="headera2">
+            <a class="headera" id="home" href="/">Home</a>
+            <a class="headera" id="comunity" href="comunity">Comunity</a>
+            <a class="headera" id="modells" href="modells">Modells</a>
+        </div>    
+    </header>
+    <main>
+        <form action="create" method="post" enctype="multipart/form-data" >
+            <p>Name</p>
+            <input type="text" name="name" required>
+            <p>Beschreibung</p>
+            <textarea name="description" rows="4" cols="40"></textarea>
+            <p>Dateien</p>
+            <input type="file" name="file" required>
+            <p>Bilder</p>
+            <input type="file" name="picture" accept="image/*" required>
+            <button>Erstellen</button>
+        </form>
+    </main>
+</body>
+</html>
