@@ -40,19 +40,24 @@
             <div id="model-list-1">
                 <% models.slice(0, 1).forEach(model => { %>
                   <div>
-                    <img src="/models/file/<%= model.pictureFile %>" width="400" height="400"
-                      style="object-fit: contain;" class="deteil1"><br>
+                    <img src="/models/file/<%= model.pictureFile %>" width="640" height="480" class="deteil1"><br>
                     <strong class="deteil2"><%= model.name %></strong><br><br>
                     <span  style="white-space: nowrap;">Beschreibung:</span>
                     <p class="deteil2"><%= model.description %></p><br>
                     <a class="deteil2" href="#model" ><button>Download Datei</button></a>
                     <p class="deteil2">10👍</p><p class="deteil2">10⬇️</p>
                   </div>
-                  <h3>Models</h3>
-                  <br><br>
-                  <a id="model" class="deteil2" href="/models/file/<%= model.dataFile %>" download><button><%= model.dataFile %></button></a>
+                  
                 <% }); %>
               </div>
+              <a href="">Modells</a> <a href="">...</a> <a href="..."></a>
+              <% models.slice(0, 1).forEach(model => { %>
+              <div>
+                <h3>Models</h3>
+                  <br><br>
+                  <a id="model" class="deteil2" href="/models/file/<%= model.dataFile %>" download><button><%= model.dataFile %></button></a>
+              </div>
+              <% }); %>
             
     
         </section>
