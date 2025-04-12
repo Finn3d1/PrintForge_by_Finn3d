@@ -45,9 +45,12 @@
                     <strong class="deteil2"><%= model.name %></strong><br><br>
                     <span  style="white-space: nowrap;">Beschreibung:</span>
                     <p class="deteil2"><%= model.description %></p><br>
-                    <a class="deteil2" href="/models/file/<%= model.dataFile %>" download><button>Download Datei</button></a>
+                    <a class="deteil2" href="#model" ><button>Download Datei</button></a>
                     <p class="deteil2">10👍</p><p class="deteil2">10⬇️</p>
                   </div>
+                  <h3>Models</h3>
+                  <br><br>
+                  <a id="model" class="deteil2" href="/models/file/<%= model.dataFile %>" download><button><%= model.dataFile %></button></a>
                 <% }); %>
               </div>
             

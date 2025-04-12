@@ -1,26 +1,4 @@
-# Printables2.0
 
-Dieses Projekt ist eine Webanwendung zum Teilen und Anzeigen von 3D-Modellen, insbesondere für den 3D-Druck.
-
-## Projekt starten
-
-1. Repository klonen:
-   ```
-   git clone https://github.com/Finn3d1/p.git
-   cd p
-   ```
-
-2. Abhängigkeiten installieren:
-   ```
-   npm install
-   ```
-
-3. Projekt starten (Beispiel):
-   ```
-   node index.mjs
-   ```
-
-## Git-Befehle für Updates
 
 Nach jeder Änderung:
 
