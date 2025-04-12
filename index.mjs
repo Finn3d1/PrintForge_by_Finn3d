@@ -6,8 +6,6 @@ import multer from 'multer';
 import fs from 'fs/promises';
 
 
-
-
 const require = createRequire(import.meta.url);  //require
 const { writeFile } = require('fs/promises');   //require
 const __filename = fileURLToPath(import.meta.url);
@@ -64,21 +62,38 @@ app.get('/', async (req, res) => {
   try {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
     const models = JSON.parse(jsonData);
-    res.render(path.resolve("sites/index.ejs"), { models });
+
+    // IDs extrahieren
+    const modelsWithId = models.map(model => ({
+      ...model,
+      id: model.dataFile.split("-")[0]
+    }));
+
+    res.render(path.resolve("sites/index.ejs"), { models: modelsWithId });
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
   }
 });
 
-app.get('/modelldet', async (req, res) => {
+app.get("/modelldet/:id", async (req, res) => {
   try {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
     const models = JSON.parse(jsonData);
-    res.render(path.resolve("sites/modelldet.ejs"), { models });
+
+    const modelsWithId = models.map(model => ({
+      ...model,
+      id: model.dataFile.split("-")[0]
+    }));
+
+    const model = modelsWithId.find(m => m.id === req.params.id);
+    if (!model) return res.status(404).send("Nicht gefunden");
+
+    res.render(path.resolve("sites/modelldet.ejs"), { model });
+
   } catch (err) {
     console.error(err);
-    res.status(500).send("Fehler beim Laden der Modelle");
+    res.status(500).send("Fehler beim Laden des Modells");
   }
 });
 

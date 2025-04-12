@@ -44,10 +44,10 @@
         <section id="bestmodell">
             <h3 id="efm">Featured Models</h3>
             <div id="model-list-1">
-                <% models.slice(0, 4).forEach(model => { %>
+                <% models.slice(0, 4).forEach((model) => { %>
                   <div class="boarderb">
-                    <a href="modelldet">
-                    <img src="/models/file/<%= model.pictureFile %>?model=" width="200" height="200"
+                    <a href="modelldet/:<%= model.id %>">
+                    <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
                       style="object-fit: contain; background-color: white;"></a><br>
                     <strong><%= model.name %></strong>
                     <p><%= model.description %></p><br>
