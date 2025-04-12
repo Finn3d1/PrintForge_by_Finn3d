@@ -35,54 +35,23 @@
         </div>    
     </header>
     <main>
-        <section id="bestmodell">
+        <section>
             <h3 id="efm">Featured Models</h3>
             <div id="model-list-1">
-                <% models.slice(0, 4).forEach(model => { %>
-                  <div class="boarderb">
-                    <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                      style="object-fit: contain; background-color: white;"><br>
-                    <strong><%= model.name %></strong>
-                    <p><%= model.description %></p><br>
-                    <a href="/models/file/<%= model.dataFile %>" download>Download Datei</a>
-                    <p>10👍</p><p>10⬇️</p>
+                <% models.slice(0, 1).forEach(model => { %>
+                  <div>
+                    <img src="/models/file/<%= model.pictureFile %>" width="400" height="400"
+                      style="object-fit: contain;" class="deteil1"><br>
+                    <strong class="deteil2"><%= model.name %></strong><br><br>
+                    <span  style="white-space: nowrap;">Beschreibung:</span>
+                    <p class="deteil2"><%= model.description %></p><br>
+                    <a class="deteil2" href="/models/file/<%= model.dataFile %>" download><button>Download Datei</button></a>
+                    <p class="deteil2">10👍</p><p class="deteil2">10⬇️</p>
                   </div>
                 <% }); %>
               </div>
             
     
-        </section>
-        <br>
-        <section>
-            <a href="modells">
-                <button class="button" id="Explorebutton">Explore Modells</button>
-            </a>
-            
-        </section>
-        <section>
-            <h3>Best Creators</h3>
-            <div>
-                
-            </div>
-        </section>
-        <section style="background-color: white;">
-            <h3 id="newmodells">New Modells</h3>
-            <div id="model-list-2">
-                <% models.slice().reverse().slice(0, 4).forEach(model => { %>
-                  <div class="boarderb">
-                    <a href="/modelldet">
-                        <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                            style="object-fit: contain; background-color: white;">
-                    </a>
-                      <br>
-                    <strong><%= model.name %></strong>
-                    <p><%= model.description %></p><br>
-                    <a href="/models/file/<%= model.dataFile %>" download>Download Datei</a>
-                    <p>10👍</p><p>10⬇️</p>
-                  </div>
-                <% }); %>
-                <!-- Neuste Modelle -->
-              </div>
         </section>
     </main>
 </body>
