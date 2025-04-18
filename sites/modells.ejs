@@ -39,14 +39,13 @@
             <h3 id="modells">Models</h3>
             <div id="model-list-1">
                 <% models.forEach((model) => { %>
-                  <div class="boarderb">
-                    <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                      style="object-fit: contain; background-color: white;"><br>
-                    <strong><%= model.name %></strong>
-                    <p><%= model.description %></p><br>
-                    <a href="/models/file/<%= model.dataFile %>" download>Download Datei</a>
-                    <p>10👍</p><p>10⬇️</p>
-                  </div>
+                    <div class="boarderb">
+                        <a href="modelldet?id=<%= model.id %>">
+                        <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
+                          style="object-fit: contain; background-color: white;"></a><br>
+                        <strong><%= model.name %></strong>
+                        <p>10👍</p><p>10⬇️</p>
+                      </div>
                 <% }); %>
                 <!-- Neuste Modelle -->
               </div>

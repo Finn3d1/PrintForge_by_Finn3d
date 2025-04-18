@@ -36,33 +36,71 @@
     </header>
     <main>
         <section>
-            <h3 id="efm">Featured Models</h3>
             <div id="model-list-1">
   
-                    <div>
-                        <img src="/models/file/<%= model.pictureFile %>" width="640" height="480" class="deteil1"><br>
-                        <strong class="deteil2"><%= model.name %></strong><br><br>
-                        <span style="white-space: nowrap;">Beschreibung:</span>
-                        <p class="deteil2"><%= model.description %></p><br>
-                        <a class="deteil2" href="/models/file/<%= model.dataFile %>" download>
-                          <button>Download Datei</button>
-                        </a>
-                        <p class="deteil2">10👍</p><p class="deteil2">10⬇️</p>
-                      </div>
+                <div class="model-container">
+                    <!-- Bild links -->
+                    <img src="/models/file/<%= model.pictureFile %>" class="model-image" alt="Modellbild">
                   
-
+                    <!-- Rechts daneben: Name, Download, Likes -->
+                    <div class="model-meta">
+                      <strong><%= model.name %></strong><br><br>
+                  
+                      <a class="download-link" href="#mdownl" >
+                        <button onclick="showContent('model')">Download</button>
+                      </a>
+                  
+                      <p>10👍</p>
+                      <p>10⬇️</p>
+                    </div>
               </div>
-              <a href="">Modells</a> <a href="">...</a> <a href="..."></a>
-     
-              <div>
-                <h3>Models</h3>
-                  <br><br>
-                  <a id="model" class="deteil2" href="/models/file/<%= model.dataFile %>" download><button><%= model.dataFile %></button></a>
-              </div>
-           
+             
             
     
         </section>
+        <section class="model-below">
+            <button onclick="showContent('model')">Modell</button>
+            <button onclick="showContent('besch')">Beschreibung</button>
+            <button onclick="showContent('div1')">Weitere Info</button>
+          
+            <div id="model" class="content">
+              <h3>Models</h3><br><br>
+              <a id="mdownl" class="deteil2" href="/models/file/<%= model.dataFile %>" download>
+                <button><%= model.dataFile %></button>
+              </a>
+            </div>
+          
+            <div id="besch" class="content">
+              <h3>Beschreibung</h3><br><br>
+              <p class="deteil2"><%= model.description %></p><br>
+            </div>
+          
+            <div id="div1" class="content">
+              <h3>Weitere Info</h3>
+              <p>Hier könnte weiterer Inhalt stehen...</p>
+            </div>
+          </section>
+          
+          <style>
+            .content {
+              display: none;
+              padding: 15px;
+              border: 1px solid #ccc;
+              margin-top: 10px;
+            }
+            .content.active {
+              display: block;
+            }
+          </style>
+          
+          <script>
+            showContent('model');
+            function showContent(id) {
+              const contents = document.querySelectorAll('.content');
+              contents.forEach(div => div.classList.remove('active'));
+              document.getElementById(id).classList.add('active');
+            }
+          </script>
     </main>
 </body>
 </html>
