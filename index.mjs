@@ -5,7 +5,7 @@ import { createRequire } from 'module';
 import multer from 'multer';
 import fs from 'fs/promises';
 
-let id = 0;
+let id = 1;
 const require = createRequire(import.meta.url);  //require
 const { writeFile } = require('fs/promises');   //require
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +14,7 @@ const __dirname = path.dirname(__filename);
 
 //Hier alle pfäde für json dateien
 const modellspath = path.join(__dirname, 'data', 'json', 'models.json');  //path zu modells.json
+const infopath = path.join(__dirname, 'data', 'json', 'info.json');  //path zu info.json
 
 //server variablen
 const app = express();
@@ -38,14 +39,7 @@ async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(p
 
 
 const { readFile } = require('fs/promises');
-async function readThisFile(filePath) {
-  try {
-    const data = await readFile(filePath);
-    console.log(data.toString());
-  } catch (error) {
-    console.error(`Got an error trying to read the file: {error.message}`);
- }
-}
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
