@@ -5,7 +5,7 @@ import { createRequire } from 'module';
 import multer from 'multer';
 import fs from 'fs/promises';
 
-
+let id = 0;
 const require = createRequire(import.meta.url);  //require
 const { writeFile } = require('fs/promises');   //require
 const __filename = fileURLToPath(import.meta.url);
@@ -63,39 +63,29 @@ app.get('/', async (req, res) => {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
     const models = JSON.parse(jsonData);
 
-    // IDs extrahieren
-    const modelsWithId = models.map(model => ({
-      ...model,
-      id: model.dataFile.split("-")[0]
-    }));
 
-    res.render(path.resolve("sites/index.ejs"), { models: modelsWithId });
+    res.render(path.resolve("sites/index.ejs"), { models});
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
   }
 });
 
-app.get("/modelldet/:id", async (req, res) => {
+app.get('/modelldet', async (req, res) => {
   try {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
     const models = JSON.parse(jsonData);
+    const id = parseInt(req.query.id); 
+    const model = models.find(m => m.id === id); 
 
-    const modelsWithId = models.map(model => ({
-      ...model,
-      id: model.dataFile.split("-")[0]
-    }));
 
-    const model = modelsWithId.find(m => m.id === req.params.id);
-    if (!model) return res.status(404).send("Nicht gefunden");
-
-    res.render(path.resolve("sites/modelldet.ejs"), { model });
-
+    res.render(path.resolve("sites/modelldet.ejs"), { model});
   } catch (err) {
     console.error(err);
-    res.status(500).send("Fehler beim Laden des Modells");
+    res.status(500).send("Fehler beim Laden der Modelle");
   }
 });
+
 
 app.post('/index',async (req, res) => {
     const email = req.body.email;
@@ -108,7 +98,7 @@ app.post('/index',async (req, res) => {
       res.status(500).send("Fehler beim Laden der Modelle");
     }
     if(email == "f@f.f" && password == "fff"){
-        res.render(path.resolve("sites/index.ejs"))
+        res.render(path.resolve("sites/index.ejs"),  { models })
     }
     else{
         res.render(path.resolve("sites/login.ejs"))
@@ -138,8 +128,9 @@ app.post('/index',async (req, res) => {
       } catch {
         console.warn("Leere oder fehlerhafte JSON – neue Liste.");
       }
+      id = id + 1;
   
-      models.push({ name, description, pictureFile, dataFile });
+      models.push({id , name, description, pictureFile, dataFile });
       await writeToFile(modellspath, models);
   
       res.render(path.resolve("sites/index.ejs"), { models });

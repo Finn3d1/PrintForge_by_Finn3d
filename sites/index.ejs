@@ -46,7 +46,7 @@
             <div id="model-list-1">
                 <% models.slice(0, 4).forEach((model) => { %>
                   <div class="boarderb">
-                    <a href="modelldet/:<%= model.id %>">
+                    <a href="modelldet?id=<%= model.id %>">
                     <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
                       style="object-fit: contain; background-color: white;"></a><br>
                     <strong><%= model.name %></strong>

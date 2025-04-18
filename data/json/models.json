@@ -1,50 +1,16 @@
 [
   {
-    "name": "Cool",
-    "description": "mega",
-    "pictureFile": "1744137835365-20130616_175835.jpg",
-    "dataFile": "1744137835365-2b.pdf"
+    "id": 1,
+    "name": "test 1",
+    "description": "test 1 b",
+    "pictureFile": "1744987070505-Print-2.png",
+    "dataFile": "1744987070471-heroquest-dice-tower-level-1.stl"
   },
   {
-    "name": "sdc",
-    "description": "Sofa",
-    "pictureFile": "1744138084650-alex und silvia.jpg",
-    "dataFile": "1744138084643-1348-nâÃ±hanleitung-und-schnitt-trâÃ±gerrock-gr.86-134.pdf"
-  },
-  {
-    "name": "Peter",
-    "description": "mensch",
-    "pictureFile": "1744138435194-anja passbild.jpg",
-    "dataFile": "1744138435194-2 eternabend klasse 2c.doc"
-  },
-  {
-    "name": "Mats",
-    "description": "ein mensch",
-    "pictureFile": "1744282630161-Bildschirmfoto 2025-04-03 um 20.25.18.png",
-    "dataFile": "1744282630112-heroquest-dice-tower-level-3.stl"
-  },
-  {
-    "name": "dfs",
-    "description": "dfs",
-    "pictureFile": "1744375705611-1744135883318-20130616_175835.jpg",
-    "dataFile": "1744375705568-heroquest-dice-tower-level-1.stl"
-  },
-  {
-    "name": "dfs",
-    "description": "dfs",
-    "pictureFile": "1744375798269-1744135883318-20130616_175835.jpg",
-    "dataFile": "1744375798228-heroquest-dice-tower-level-1.stl"
-  },
-  {
-    "name": "dfs",
-    "description": "dfs",
-    "pictureFile": "1744375846005-1744135883318-20130616_175835.jpg",
-    "dataFile": "1744375845964-heroquest-dice-tower-level-1.stl"
-  },
-  {
-    "name": "ds",
-    "description": "dass",
-    "pictureFile": "1744376067053-Print.png",
-    "dataFile": "1744376067042-1744135883318-20130616_175835.jpg"
+    "id": 2,
+    "name": "modell 2",
+    "description": "modell 2",
+    "pictureFile": "1744987693940-bc01fe8d-58ec-4044-9a49-7fc48a8e251d.webp",
+    "dataFile": "1744987693938-1x1x1-Deep - Multibin Simple Drawer.stl"
   }
 ]
