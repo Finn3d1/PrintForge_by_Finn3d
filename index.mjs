@@ -52,6 +52,19 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+
+async function initId() {
+  try {
+    const fileData = await fs.readFile(modellspath, 'utf-8');
+    const models = JSON.parse(fileData);
+    id = models.length > 0 ? Math.max(...models.map(m => m.id)) + 1 : 1;
+  } catch (error) {
+    console.error('Fehler beim Initialisieren der ID:', error);
+    id = 1;
+  }
+}
+
+
 app.get('/', async (req, res) => {
   try {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
@@ -193,6 +206,10 @@ app.get('/picture/accounnt.png', (req, res) => {
 
 
 
-app.listen(port, () => {
-  console.log(`Seite Online unter Port ${port}`)
-})
+  initId().then(() => {
+    app.listen(port, () => {
+      console.log(`Seite Online unter Port ${port}`);
+      console.log(id);
+    });
+  });
+
