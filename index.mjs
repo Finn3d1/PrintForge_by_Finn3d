@@ -31,7 +31,6 @@ async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(p
   try {
     const jsonData = JSON.stringify(data, null, 2); 
     await writeFile(fileName, jsonData);
-    console.log(`Wrote data to ${fileName}`);
   } catch (error) {
     console.error(`Got an error trying to write the file: ${error.message}`);
   }
@@ -86,11 +85,35 @@ app.get('/modelldet', async (req, res) => {
     const model = models.find(m => m.id === id); 
 
 
-    res.render(path.resolve("sites/modelldet.ejs"), { model});
+    res.render(path.resolve("sites/modelldet.ejs"), { model, id });
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
   }
+});
+
+app.get('/like', async (req, res) => {
+  const auswahl = req.query.like;
+  const id = parseInt(req.query.id);
+
+  const jsonData = await fs.readFile(modellspath, 'utf-8');
+  const models = JSON.parse(jsonData);
+
+  const model = models.find(m => m.id === id);
+  if (!model) {
+    return res.status(404).send("Modell nicht gefunden");
+  }
+
+  if (auswahl === "on") {
+    // Falls noch kein Like-Zähler vorhanden ist, initialisieren
+    if (!model.like) model.like = 0;
+    model.like += 1;
+
+    // Datei speichern
+    await writeToFile(modellspath, models);
+  }
+
+  res.render(path.resolve("sites/modelldet.ejs"), { model, id });
 });
 
 
@@ -209,7 +232,6 @@ app.get('/picture/accounnt.png', (req, res) => {
   initId().then(() => {
     app.listen(port, () => {
       console.log(`Seite Online unter Port ${port}`);
-      console.log(id);
     });
   });
 

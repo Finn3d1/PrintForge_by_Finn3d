@@ -49,8 +49,12 @@
                       <a class="download-link" href="#mdownl" >
                         <button onclick="showContent('model')">Download</button>
                       </a>
-                  
-                      <p>10👍</p>
+                      <form action="/like" method="get">
+                        <input type="hidden" name="id" value="<%= model.id %>">
+                        <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
+                        <label for="like">👍</label>
+                        <p><%= model.like %></p>
+                      </form>
                       <p>10⬇️</p>
                     </div>
               </div>
