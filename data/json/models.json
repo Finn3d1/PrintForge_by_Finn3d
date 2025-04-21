@@ -5,13 +5,22 @@
     "description": "test 1 b",
     "pictureFile": "1744987070505-Print-2.png",
     "dataFile": "1744987070471-heroquest-dice-tower-level-1.stl",
-    "like": 63
+    "like": 66
   },
   {
     "id": 2,
     "name": "modell 2",
     "description": "modell 2",
     "pictureFile": "1744987693940-bc01fe8d-58ec-4044-9a49-7fc48a8e251d.webp",
-    "dataFile": "1744987693938-1x1x1-Deep - Multibin Simple Drawer.stl"
+    "dataFile": "1744987693938-1x1x1-Deep - Multibin Simple Drawer.stl",
+    "like": 1
+  },
+  {
+    "id": 4,
+    "name": "hallo ",
+    "description": "das",
+    "pictureFile": "1745250565941-Print.png",
+    "dataFile": "1745250565935-1x1x0.5 - Topped Multipoint Rail - Multibin Shell.stl",
+    "like": 3
   }
 ]

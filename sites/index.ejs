@@ -45,13 +45,18 @@
             <h3 id="efm">Featured Models</h3>
             <div id="model-list-1">
                 <% models.slice(0, 4).forEach((model) => { %>
-                  <div class="boarderb">
-                    <a href="modelldet?id=<%= model.id %>">
-                    <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                      style="object-fit: contain; background-color: white;"></a><br>
-                    <strong><%= model.name %></strong>
-                    <p>10👍</p><p>10⬇️</p>
-                  </div>
+                    <div class="boarderb">
+                        <a href="modelldet?id=<%= model.id %>">
+                        <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
+                          style="object-fit: contain; background-color: white;"></a><br>
+                        <strong><%= model.name %></strong>
+                        <form action="/like" method="get">
+                            <input type="hidden" name="id" value="<%= model.id %>">
+                            <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
+                            <label for="like">👍</label>
+                            <p><%= model.like %></p>
+                          </form><p>10⬇️</p>
+                      </div>
                 <% }); %>
               </div>
             
@@ -75,12 +80,18 @@
             <div id="model-list-2" onclick="modelldet()">
                 <% models.slice().reverse().slice(0, 4).forEach(model => { %>
                     <div class="boarderb">
-                        <a href="modelldet?id=<%= model.id %>">
-                        <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                          style="object-fit: contain; background-color: white;"></a><br>
-                        <strong><%= model.name %></strong>
-                        <p>10👍</p><p>10⬇️</p>
-                      </div>
+                        <div class="boarderb">
+                            <a href="modelldet?id=<%= model.id %>">
+                            <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
+                              style="object-fit: contain; background-color: white;"></a><br>
+                            <strong><%= model.name %></strong>
+                            <form action="/like" method="get">
+                                <input type="hidden" name="id" value="<%= model.id %>">
+                                <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
+                                <label for="like">👍</label>
+                                <p><%= model.like %></p>
+                              </form><p>10⬇️</p>
+                          </div>
                 <% }); %>
                 <!-- Neuste Modelle -->
               </div>

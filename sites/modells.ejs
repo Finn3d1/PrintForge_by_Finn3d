@@ -37,6 +37,11 @@
     <main>
         <section>
             <h3 id="modells">Models</h3>
+            <select id="filter" onchange="applyFilter()">
+                <option value="newest">Neueste</option>
+                <option value="oldest">Älteste</option>
+                <option value="likes">Meiste Likes</option>
+              </select>
             <div id="model-list-1">
                 <% models.forEach((model) => { %>
                     <div class="boarderb">
@@ -44,7 +49,12 @@
                         <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
                           style="object-fit: contain; background-color: white;"></a><br>
                         <strong><%= model.name %></strong>
-                        <p>10👍</p><p>10⬇️</p>
+                        <form action="/like" method="get">
+                            <input type="hidden" name="id" value="<%= model.id %>">
+                            <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
+                            <label for="like">👍</label>
+                            <p><%= model.like %></p>
+                          </form><p>10⬇️</p>
                       </div>
                 <% }); %>
                 <!-- Neuste Modelle -->

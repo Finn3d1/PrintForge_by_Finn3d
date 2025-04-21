@@ -182,9 +182,22 @@ app.post('/index',async (req, res) => {
 
   app.get('/modells', async (req, res) => {
     try {
+      const sort = req.query.sort || 'newest';
       const jsonData = await fs.readFile(modellspath, 'utf-8');
       const models = JSON.parse(jsonData);
-      res.render(path.resolve("sites/modells.ejs"), { models });
+  
+      let sortedModels = [...models];
+  
+      if (sort === 'oldest') {
+        // Nichts ändern
+      } else if (sort === 'likes') {
+        sortedModels.sort((a, b) => (b.like || 0) - (a.like || 0));
+      } else {
+        // newest
+        sortedModels.reverse();
+      }
+  
+      res.render(path.resolve("sites/modells.ejs"), { models: sortedModels });
     } catch (err) {
       console.error(err);
       res.status(500).send("Fehler beim Laden der Modelle");
