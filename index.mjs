@@ -15,6 +15,7 @@ const __dirname = path.dirname(__filename);
 //Hier alle pfäde für json dateien
 const modellspath = path.join(__dirname, 'data', 'json', 'models.json');  //path zu modells.json
 const infopath = path.join(__dirname, 'data', 'json', 'info.json');  //path zu info.json
+const userpath = path.join(__dirname, 'data', 'json', 'user.json');  //path zu info.json
 
 //server variablen
 const app = express();
@@ -89,6 +90,29 @@ app.get('/modelldet', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
+  }
+});
+
+app.get('/crateaccount',  (req, res) => {
+  res.render(path.resolve("sites/crateaccount.ejs"));
+});
+
+app.post('/createlogin', async (req, res) => {
+  try {
+    const jsonData = await fs.readFile(userpath, 'utf-8');
+    const email = req.body.email;
+    const user = req.body.username;
+    const password = req.body.password;
+    const users = JSON.parse(jsonData);
+    users.push({ email, user, password });
+    await writeToFile(userpath, users);
+ 
+
+
+    res.render(path.resolve("sites/login.ejs"));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Felser beim estellen vom account");
   }
 });
 
@@ -247,4 +271,3 @@ app.get('/picture/accounnt.png', (req, res) => {
       console.log(`Seite Online unter Port ${port}`);
     });
   });
-
