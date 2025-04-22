@@ -9,3 +9,5 @@ im Terminal:
    git commit -m "Update: Kurze Beschreibung"
    git push
    ```
+
+Create by Finn
