@@ -38,7 +38,11 @@
         <section id="info">
 
             <h2 id="Hello">Welcomme to PrintCloud</h2>
-            <br>
+            <br><% if (userFound) { %>
+                <p>Willkommen, <%= userFound.user %>!</p>
+              <% } else { %>
+                <p>Benutzer nicht gefunden.</p>
+              <% } %>
             <h3 id="Hello2">The best side for 3d Printing 3d Modells</h3>
         </section>
         <section id="bestmodell">

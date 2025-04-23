@@ -1,9 +1,10 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url'; 
-import { createRequire } from 'module';
-import multer from 'multer';
-import fs from 'fs/promises';
+import express from 'express'; //importiren exppress
+import path from 'path'; // importiren von path (verzeichnes)
+import { fileURLToPath } from 'url'; // Macht aus URL einen Dateipfad
+import { createRequire } from 'module'; // Erlaubt require in ES-Modulen
+import multer from 'multer';   // dateiploads
+import fs from 'fs/promises';  // dateisystem
+import https from 'https'; // httpps
 
 let id = 1;
 const require = createRequire(import.meta.url);  //require
@@ -11,6 +12,7 @@ const { writeFile } = require('fs/promises');   //require
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);  
 
+const { readFile } = require('fs/promises');
 
 //Hier alle pfäde für json dateien
 const modellspath = path.join(__dirname, 'data', 'json', 'models.json');  //path zu modells.json
@@ -21,12 +23,18 @@ const userpath = path.join(__dirname, 'data', 'json', 'user.json');  //path zu i
 const app = express();
 const port = 1000;
 
+// Https key
+const httpsOptions = { 
+  key: await fs.readFile(path.join(__dirname, 'ssl', 'key.pem')),
+  cert: await fs.readFile(path.join(__dirname, 'ssl', 'cert.pem'))
+};
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());  //endert zu json vormat
 app.use(express.urlencoded({ extended: false })); //macht name in form sichbar
 
-app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file')));
+app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file'))); // gibt die modelle frei
 
 async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(pfad, dateiinhalt);
   try {
@@ -36,10 +44,6 @@ async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(p
     console.error(`Got an error trying to write the file: ${error.message}`);
   }
 }
-
-
-const { readFile } = require('fs/promises');
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -53,7 +57,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 
-async function initId() {
+async function initId() { // sorgt das id immer so groß ist wie die anzal der modelle
   try {
     const fileData = await fs.readFile(modellspath, 'utf-8');
     const models = JSON.parse(fileData);
@@ -71,7 +75,7 @@ app.get('/', async (req, res) => {
     const models = JSON.parse(jsonData);
 
 
-    res.render(path.resolve("sites/index.ejs"), { models});
+    res.render(path.resolve("sites/index.ejs"), { models,userFound: null});
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
@@ -141,24 +145,37 @@ app.get('/like', async (req, res) => {
 });
 
 
-app.post('/index',async (req, res) => {
+app.post('/index', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
+    let models = [];
     try {
       const jsonData = await fs.readFile(modellspath, 'utf-8');
-      const models = JSON.parse(jsonData);
+      models = JSON.parse(jsonData);
     } catch (err) {
       console.error(err);
       res.status(500).send("Fehler beim Laden der Modelle");
+      return;
     }
-    if(email == "f@f.f" && password == "fff"){
-        res.render(path.resolve("sites/index.ejs"),  { models })
+    try {
+      const userData = await fs.readFile(userpath, 'utf-8');
+      const users = JSON.parse(userData);
+      const userFound = users.find(u => u.email === email && u.password === password);
+
+      if (userFound) {
+        let userEmail = userFound.email;
+        let userName = userFound.user;
+        let userPassword = userFound.password;
+
+          res.render(path.resolve("sites/index.ejs"), { models , userFound});
+      } else {
+          res.render(path.resolve("sites/login.ejs"));
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Fehler beim Überprüfen der Benutzer");
     }
-    else{
-        res.render(path.resolve("sites/login.ejs"))
-    }
-    
-  })
+});
 
 
 
@@ -267,7 +284,7 @@ app.get('/picture/accounnt.png', (req, res) => {
 
 
   initId().then(() => {
-    app.listen(port, () => {
-      console.log(`Seite Online unter Port ${port}`);
+    https.createServer(httpsOptions, app).listen(port, () => {
+      console.log(`HTTPS-Server läuft auf Port ${port}`);
     });
   });
