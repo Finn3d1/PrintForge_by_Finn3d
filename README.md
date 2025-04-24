@@ -11,3 +11,5 @@ im Terminal:
    ```
 
 Create by Finn
+npm install connect-redis redis
+npm isstall

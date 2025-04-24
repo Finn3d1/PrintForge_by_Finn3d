@@ -5,6 +5,9 @@ import { createRequire } from 'module'; // Erlaubt require in ES-Modulen
 import multer from 'multer';   // dateiploads
 import fs from 'fs/promises';  // dateisystem
 import https from 'https'; // httpps
+import session from 'express-session';
+
+
 
 let id = 1;
 const require = createRequire(import.meta.url);  //require
@@ -35,6 +38,12 @@ app.use(express.json());  //endert zu json vormat
 app.use(express.urlencoded({ extended: false })); //macht name in form sichbar
 
 app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file'))); // gibt die modelle frei
+// Session Middleware hinzufügen
+app.use(session({
+  secret: 'your-secret-key', // ein geheimen Schlüssel hier verwenden
+  resave: false,
+  saveUninitialized: true
+}));
 
 async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(pfad, dateiinhalt);
   try {
@@ -75,7 +84,7 @@ app.get('/', async (req, res) => {
     const models = JSON.parse(jsonData);
 
 
-    res.render(path.resolve("sites/index.ejs"), { models,userFound: null});
+    res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user || null});
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
@@ -90,7 +99,7 @@ app.get('/modelldet', async (req, res) => {
     const model = models.find(m => m.id === id); 
 
 
-    res.render(path.resolve("sites/modelldet.ejs"), { model, id });
+    res.render(path.resolve("sites/modelldet.ejs"), { model, id, userFound: req.session.user || null });
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
@@ -98,7 +107,7 @@ app.get('/modelldet', async (req, res) => {
 });
 
 app.get('/crateaccount',  (req, res) => {
-  res.render(path.resolve("sites/crateaccount.ejs"));
+  res.render(path.resolve("sites/crateaccount.ejs"),{userFound: req.session.user || null});
 });
 
 app.post('/createlogin', async (req, res) => {
@@ -113,7 +122,7 @@ app.post('/createlogin', async (req, res) => {
  
 
 
-    res.render(path.resolve("sites/login.ejs"));
+    res.render(path.resolve("sites/login.ejs"),{userFound: null});
   } catch (err) {
     console.error(err);
     res.status(500).send("Felser beim estellen vom account");
@@ -141,40 +150,51 @@ app.get('/like', async (req, res) => {
     await writeToFile(modellspath, models);
   }
 
-  res.render(path.resolve("sites/modelldet.ejs"), { model, id });
+  res.render(path.resolve("sites/modelldet.ejs"), { model, id ,userFound: req.session.user || null});
 });
 
-
 app.post('/index', async (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-    let models = [];
-    try {
-      const jsonData = await fs.readFile(modellspath, 'utf-8');
-      models = JSON.parse(jsonData);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Fehler beim Laden der Modelle");
-      return;
-    }
-    try {
-      const userData = await fs.readFile(userpath, 'utf-8');
-      const users = JSON.parse(userData);
-      const userFound = users.find(u => u.email === email && u.password === password);
+  const email = req.body.email;
+  const password = req.body.password;
+  let models = [];
+  try {
+    const jsonData = await fs.readFile(modellspath, 'utf-8');
+    models = JSON.parse(jsonData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fehler beim Laden der Modelle");
+    return;
+  }
+  try {
+    const userData = await fs.readFile(userpath, 'utf-8');
+    const users = JSON.parse(userData);
+    const userFound = users.find(u => u.email === email && u.password === password);
 
-      if (userFound) {
-        let userEmail = userFound.email;
-        let userName = userFound.user;
-        let userPassword = userFound.password;
+    if (userFound) {
+      // Speichern des Benutzers in der Session
+      req.session.user = {
+        email: userFound.email,
+        username: userFound.user,
+        password: userFound.password
+      };
 
-          res.render(path.resolve("sites/index.ejs"), { models , userFound});
-      } else {
-          res.render(path.resolve("sites/login.ejs"));
-      }
-    } catch (err) {
-      console.error(err);
-      res.status(500).send("Fehler beim Überprüfen der Benutzer");
+      res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user });
+    } else {
+      res.render(path.resolve("sites/login.ejs"));
     }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Fehler beim Überprüfen der Benutzer");
+  }
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).send("Fehler beim Logout");
+    }
+    res.redirect('/');
+  });
 });
 
 
@@ -204,7 +224,7 @@ app.post('/index', async (req, res) => {
       models.push({id , name, description, pictureFile, dataFile });
       await writeToFile(modellspath, models);
   
-      res.render(path.resolve("sites/index.ejs"), { models });
+      res.render(path.resolve("sites/index.ejs"), { models ,userFound: req.session.user || null});
     } catch (error) {
       console.error(error);
       res.status(500).send("Fehler beim Speichern.");
@@ -213,11 +233,11 @@ app.post('/index', async (req, res) => {
 
 
   app.get('/login', (req, res) => {
-    res.render(path.resolve("sites/login.ejs"))
+    res.render(path.resolve("sites/login.ejs"),{userFound: req.session.user || null});
   })
 
   app.get('/crateaccount', (req, res) => {
-    res.render(path.resolve("sites/crateaccount.ejs"))
+    res.render(path.resolve("sites/crateaccount.ejs"),{userFound: req.session.user || null});
   })
   
 
@@ -238,7 +258,7 @@ app.post('/index', async (req, res) => {
         sortedModels.reverse();
       }
   
-      res.render(path.resolve("sites/modells.ejs"), { models: sortedModels });
+      res.render(path.resolve("sites/modells.ejs"), { models: sortedModels ,userFound:req.session.user || null });
     } catch (err) {
       console.error(err);
       res.status(500).send("Fehler beim Laden der Modelle");
@@ -248,37 +268,37 @@ app.post('/index', async (req, res) => {
 
 
 app.get('/comunity', (req, res) => {
-    res.render(path.resolve("sites/comunity.ejs"))
+    res.render(path.resolve("sites/comunity.ejs"),{userFound: req.session.user || null});
   })
  
 
  app.get('/cratemodell', (req, res) => {
-    res.render(path.resolve("sites/cratemodell.ejs"))
+    res.render(path.resolve("sites/cratemodell.ejs"),{userFound: req.session.user || null});
   })
 
   app.get('/js/index.js', (req, res) => {
-    res.sendFile(path.resolve("sites/js/index.js"))
+    res.sendFile(path.resolve("sites/js/index.js"));
   })
 
 app.get('/js/languare.js', (req, res) => {
-    res.sendFile(path.resolve("sites/js/languare.js"))
+    res.sendFile(path.resolve("sites/js/languare.js"));
   })
 
 app.get('/main.css', (req, res) => {
-    res.sendFile(path.resolve("sites/main.css"))
+    res.sendFile(path.resolve("sites/main.css"));
   })
 
   app.get('/header.css', (req, res) => {
-    res.sendFile(path.resolve("sites/header.css"))
+    res.sendFile(path.resolve("sites/header.css"));
   })
 
 
 app.get('/picture/logo.png', (req, res) => {
-    res.sendFile(path.resolve("sites/picture/logo.png"))
+    res.sendFile(path.resolve("sites/picture/logo.png"));
   })
 
 app.get('/picture/accounnt.png', (req, res) => {
-    res.sendFile(path.resolve("sites/picture/accounnt.png"))
+    res.sendFile(path.resolve("sites/picture/accounnt.png"));
   })
 
 

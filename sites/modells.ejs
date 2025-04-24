@@ -7,25 +7,36 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="header.css">
     <link rel="icon" type="image/x-icon" href="picture/logo.png">
+    <% if (userFound) { %>
+        <p id="username" style="display:none"><%= userFound.user %></p>
+        <p id="pas" style="display:none"><%= userFound.password %></p>
+        <p id="email" style="display:none"><%= userFound.email %></p>
+    <% } %>
 </head>
 <body>
     <script src="js/index.js"></script>
     <script src="js/languare.js"></script>
     <header>
         <div class="headerb2">
-            <select class="headerb" id="lang" onchange="languare()">
+            <select class="headerb" id="lang" onchange="serLanguare()">
                 <option selected>Deutsch</option>
                 <option>Englisch</option>
             </select>
             <form class="headerb" action="modells">
                 <input name="search"  placeholder="Search..." type="search">
             </form>
-            <a class="headerb" href="login">
-                <img class="aimg" src="/picture/accounnt.png" alt="">
-            </a>
-            <a href="cratemodell">
-                <button class="headerb">Erstellen</button>
-            </a>
+            <% if (userFound) { %>
+                <p> <%= userFound.user %></p>
+                <button onclick="logout()">Logout</button>
+                <a href="cratemodell">
+                    <button class="headerb">Erstellen</button>
+                </a>
+              <% } else { %>
+                <a class="headerb" href="login">
+                    <img class="aimg" src="/picture/accounnt.png" alt="">
+                </a>
+              <% } %>
+            
             
         </div>  
         <div class="headera2">
