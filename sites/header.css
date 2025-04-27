@@ -1,48 +1,83 @@
+/* Header Styling */
 header {
+    background-color: #1e2a3a; /* Dunkelblau für professionellen Look */
+    padding: 20px 0;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+}
 
-    background-color: #2b9fc8;
+/* Header Navigation */
+.headerb2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
 }
 
 .headerb {
-    display: grid;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    margin-top: 10px;
-
-
-}
-
-.headerb2 {
-    height: 100px; 
     display: flex;
     justify-content: center;
-
-
+    align-items: center;
 }
 
 .headera {
-    
     text-decoration: none;
-    font-size: 15pt;
-    margin-left: 20px;
-    margin-right: 20px;
-
+    font-size: 18px;
+    color: white;
+    margin: 0 15px;
+    transition: color 0.3s ease;
 }
 
 .headera:hover {
-    text-decoration: none;
-    color: brown;
-}
-
-.headera2 {
-    text-align: center;
+    color: #ff6f61; /* Sanfter Hover-Effekt */
 }
 
 .aimg {
     max-height: 50px;
-    max-width: 50px;
-    width: 50;
-    height: 50;
-    margin-top: 10px;
+    width: auto;
+    margin-top: 5px;
+}
+
+/* Sprache Dropdown */
+#lang {
+    background-color: #2b9fc8;
+    border: none;
+    padding: 8px 15px;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#lang:hover {
+    background-color: #308eb1;
+}
+
+/* User Info & Logout Button */
+button {
+    background-color: #ff6f61;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #d24c3a;
+}
+
+/* Styling für den "Create" Button */
+a .headerb {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+a .headerb:hover {
+    background-color: #4cae4c;
 }

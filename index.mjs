@@ -40,9 +40,12 @@ app.use(express.urlencoded({ extended: false })); //macht name in form sichbar
 app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file'))); // gibt die modelle frei
 // Session Middleware hinzufügen
 app.use(session({
-  secret: 'your-secret-key', // ein geheimen Schlüssel hier verwenden
+  secret: 'your-secret-key',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 50 * 60 * 60 * 1000 // 50 Stunden Gültigkeit
+  }
 }));
 
 async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(pfad, dateiinhalt);
@@ -51,6 +54,14 @@ async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(p
     await writeFile(fileName, jsonData);
   } catch (error) {
     console.error(`Got an error trying to write the file: ${error.message}`);
+  }
+}
+
+function checkAuthenticated(req, res, next) {
+  if (req.session.user) {
+    next(); // User ist eingeloggt — weiter zur nächsten Middleware/Route
+  } else {
+    res.redirect('/login'); // Nicht eingeloggt — zurück zum Login
   }
 }
 
@@ -199,7 +210,7 @@ app.post('/logout', (req, res) => {
 
 
 
-  app.post('/create', upload.fields([
+  app.post('/create', checkAuthenticated, upload.fields([
     { name: 'picture', maxCount: 1 },
     { name: 'file', maxCount: 1 }
     
@@ -233,24 +244,33 @@ app.post('/logout', (req, res) => {
 
 
   app.get('/login', (req, res) => {
-    res.render(path.resolve("sites/login.ejs"),{userFound: req.session.user || null});
-  })
+    res.render(path.resolve("sites/login.ejs"),{userFound: null});
+  });
 
   app.get('/crateaccount', (req, res) => {
     res.render(path.resolve("sites/crateaccount.ejs"),{userFound: req.session.user || null});
-  })
+  });
   
 
   app.get('/modells', async (req, res) => {
     try {
       const sort = req.query.sort || 'newest';
+      const search = (req.query.search || '').toLowerCase(); // Suchbegriff klein schreiben für Vergleich
       const jsonData = await fs.readFile(modellspath, 'utf-8');
-      const models = JSON.parse(jsonData);
+      let models = JSON.parse(jsonData);
   
+      // Wenn ein Suchbegriff vorhanden ist, filtern
+      if (search) {
+        models = models.filter(m => 
+          m.name.toLowerCase().includes(search) || 
+          (m.description && m.description.toLowerCase().includes(search))
+        );
+      }
+  
+      // Sortieren
       let sortedModels = [...models];
-  
       if (sort === 'oldest') {
-        // Nichts ändern
+        // nichts tun
       } else if (sort === 'likes') {
         sortedModels.sort((a, b) => (b.like || 0) - (a.like || 0));
       } else {
@@ -258,7 +278,7 @@ app.post('/logout', (req, res) => {
         sortedModels.reverse();
       }
   
-      res.render(path.resolve("sites/modells.ejs"), { models: sortedModels ,userFound:req.session.user || null });
+      res.render(path.resolve("sites/modells.ejs"), { models: sortedModels,search, userFound: req.session.user || null });
     } catch (err) {
       console.error(err);
       res.status(500).send("Fehler beim Laden der Modelle");

@@ -24,7 +24,7 @@ function setLanguage() {
         setText("efm", "Beste Modelle");
         setText("home", "Home");
         setText("comunity", "Community");
-        setText("modells", "Modelle");
+        setText("modells", "Modele");
         setText("Hello", "Willkommen zu PrintCloud");
         setText("Hello2", "Die beste Seite für 3D-Druck-Modelle");
         setText("Explorebutton", "Entdecke Modelle");

@@ -11,5 +11,5 @@ im Terminal:
    ```
 
 Create by Finn
-npm install connect-redis redis
-npm isstall
+npm init -y
+npm install express multer express-session
