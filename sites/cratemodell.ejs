@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="header.css">
     <link rel="icon" type="image/x-icon" href="picture/logo.png">
     <% if (userFound) { %>
-        <p id="username" style="display:none"><%= userFound.user %></p>
+        
         <p id="pas" style="display:none"><%= userFound.password %></p>
+        <p id="username" style="display:none"><%= userFound.username %></p>
         <p id="email" style="display:none"><%= userFound.email %></p>
     <% } %>
 </head>
@@ -47,6 +48,7 @@
     </header>
     <main>
         <form action="create" method="post" enctype="multipart/form-data" >
+            <input type="hidden" name="user" value=<%= userFound.username %>>
             <p>Name</p>
             <input type="text" name="name" required>
             <p>Beschreibung</p>

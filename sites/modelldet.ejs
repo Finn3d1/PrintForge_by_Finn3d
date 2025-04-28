@@ -55,7 +55,8 @@
                   
                     <!-- Rechts daneben: Name, Download, Likes -->
                     <div class="model-meta">
-                      <strong><%= model.name %></strong><br><br>
+                      <strong><%= model.name %></strong><br>
+                      <strong>By: <%= model.userb %></strong><br>
                   
                       <a class="download-link" href="#mdownl" >
                         <button onclick="showContent('model')">Download</button>
@@ -91,8 +92,8 @@
             </div>
           
             <div id="div1" class="content">
-              <h3>Weitere Info</h3>
-              <p>Hier könnte weiterer Inhalt stehen...</p>
+              <h3>User</h3>
+              <strong>By: <%= model.userb %></strong>
             </div>
           </section>
           

@@ -57,13 +57,6 @@ async function writeToFile(fileName, data) {    // Datei schreiben writeToFile(p
   }
 }
 
-function checkAuthenticated(req, res, next) {
-  if (req.session.user) {
-    next(); // User ist eingeloggt — weiter zur nächsten Middleware/Route
-  } else {
-    res.redirect('/login'); // Nicht eingeloggt — zurück zum Login
-  }
-}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -210,13 +203,14 @@ app.post('/logout', (req, res) => {
 
 
 
-  app.post('/create', checkAuthenticated, upload.fields([
+  app.post('/create', upload.fields([
     { name: 'picture', maxCount: 1 },
     { name: 'file', maxCount: 1 }
     
   ]), async (req, res) => {
     const name = req.body.name;
     const description = req.body.description;
+    const userb = req.body.user;
   
     const pictureFile = req.files.picture ? req.files.picture[0].filename : null;
     const dataFile = req.files.file ? req.files.file[0].filename : null;
@@ -232,9 +226,9 @@ app.post('/logout', (req, res) => {
       }
       id = id + 1;
   
-      models.push({id , name, description, pictureFile, dataFile });
+      models.push({id , name, description, pictureFile, dataFile , userb });
       await writeToFile(modellspath, models);
-  
+ 
       res.render(path.resolve("sites/index.ejs"), { models ,userFound: req.session.user || null});
     } catch (error) {
       console.error(error);
@@ -294,6 +288,8 @@ app.get('/comunity', (req, res) => {
 
  app.get('/cratemodell', (req, res) => {
     res.render(path.resolve("sites/cratemodell.ejs"),{userFound: req.session.user || null});
+    
+  
   })
 
   app.get('/js/index.js', (req, res) => {
