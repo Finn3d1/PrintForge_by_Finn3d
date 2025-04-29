@@ -23,19 +23,22 @@
                 <option>Englisch</option>
             </select>
             <form class="headerb" action="modells">
-                <input name="search" value="<%= typeof search !== 'undefined' ? search : '' %>" placeholder="Search..." type="search">
+                <input name="search"  placeholder="Search..." type="search">
             </form>
             <% if (userFound) { %>
-                <p> <%= userFound.user %></p>
+                <p id="username" style="display:none"><%= userFound.username %></p>
+                <p id="email" style="display:none"><%= userFound.email %></p>
+                <p id="pas" style="display:none"><%= userFound.password %></p>
+                <p>Hallo, <%= userFound.username %></p>
                 <button onclick="logout()">Logout</button>
                 <a href="cratemodell">
                     <button class="headerb">Erstellen</button>
                 </a>
-              <% } else { %>
+            <% } else { %>
                 <a class="headerb" href="login">
                     <img class="aimg" src="/picture/accounnt.png" alt="">
                 </a>
-              <% } %>
+            <% } %>
             
             
         </div>  

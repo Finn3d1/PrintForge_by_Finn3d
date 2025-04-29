@@ -26,16 +26,19 @@
                 <input name="search"  placeholder="Search..." type="search">
             </form>
             <% if (userFound) { %>
-                <p> <%= userFound.user %></p>
+                <p id="username" style="display:none"><%= userFound.username %></p>
+                <p id="email" style="display:none"><%= userFound.email %></p>
+                <p id="pas" style="display:none"><%= userFound.password %></p>
+                <p>Hallo, <%= userFound.username %></p>
                 <button onclick="logout()">Logout</button>
                 <a href="cratemodell">
                     <button class="headerb">Erstellen</button>
                 </a>
-              <% } else { %>
+            <% } else { %>
                 <a class="headerb" href="login">
                     <img class="aimg" src="/picture/accounnt.png" alt="">
                 </a>
-              <% } %>
+            <% } %>
             
             
         </div>  
@@ -64,10 +67,11 @@
                       <form action="/like" method="get">
                         <input type="hidden" name="id" value="<%= model.id %>">
                         <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
-                        <label for="like">👍</label>
                         <p><%= model.like %></p>
+                        <label for="like">👍</label>
+                        
                       </form>
-                      <p>10⬇️</p>
+                      <label><%= model.download %> ⬇️</label>
                     </div>
               </div>
              
@@ -79,11 +83,16 @@
             <button onclick="showContent('besch')">Beschreibung</button>
             <button onclick="showContent('div1')">Weitere Info</button>
           
-            <div id="model" class="content">
+            <div id="model" class="content"  >
               <h3>Models</h3><br><br>
-              <a id="mdownl" class="deteil2" href="/models/file/<%= model.dataFile %>" download>
-                <button><%= model.dataFile %></button>
-              </a>
+              <form action="/download" target="_blank">
+                <input type="hidden" name="id" value="<%= model.id %>">
+                <!--a  href="models/file/<%= model.dataFile %>" download-->
+                  <button id="mdownl" ><%= model.dataFile %></button>
+                <!--/a-->
+              </form>
+                
+              
             </div>
           
             <div id="besch" class="content">

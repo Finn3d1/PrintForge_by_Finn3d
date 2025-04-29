@@ -21,7 +21,7 @@ const { readFile } = require('fs/promises');
 const modellspath = path.join(__dirname, 'data', 'json', 'models.json');  //path zu modells.json
 const infopath = path.join(__dirname, 'data', 'json', 'info.json');  //path zu info.json
 const userpath = path.join(__dirname, 'data', 'json', 'user.json');  //path zu info.json
-
+ 
 //server variablen
 const app = express();
 const port = 1000;
@@ -157,6 +157,26 @@ app.get('/like', async (req, res) => {
   res.render(path.resolve("sites/modelldet.ejs"), { model, id ,userFound: req.session.user || null});
 });
 
+app.get('/download', async (req, res) => {
+  const id = parseInt(req.query.id);
+
+  const jsonData = await fs.readFile(modellspath, 'utf-8');
+  const models = JSON.parse(jsonData);
+
+  const model = models.find(m => m.id === id);
+  const filepath = model.dataFile;
+  if (!model) {
+    return res.status(404).send("Modell nicht gefunden");
+  }
+
+ 
+    if (!model.download) model.download = 0;
+    model.download += 1;
+    res.download(path.resolve("sites/models/file/"+filepath));
+
+   
+}); 
+
 app.post('/index', async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -211,6 +231,8 @@ app.post('/logout', (req, res) => {
     const name = req.body.name;
     const description = req.body.description;
     const userb = req.body.user;
+    const download = 0;
+    const like = 0;
   
     const pictureFile = req.files.picture ? req.files.picture[0].filename : null;
     const dataFile = req.files.file ? req.files.file[0].filename : null;
@@ -226,7 +248,7 @@ app.post('/logout', (req, res) => {
       }
       id = id + 1;
   
-      models.push({id , name, description, pictureFile, dataFile , userb });
+      models.push({id , name, description, pictureFile, dataFile , userb ,like, download });
       await writeToFile(modellspath, models);
  
       res.render(path.resolve("sites/index.ejs"), { models ,userFound: req.session.user || null});
