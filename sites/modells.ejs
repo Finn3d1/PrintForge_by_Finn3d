@@ -23,7 +23,7 @@
                 <option>Englisch</option>
             </select>
             <form class="headerb" action="modells">
-                <input name="search"  placeholder="Search..." type="search">
+                <input name="search" placeholder="Search..." type="search" value="<%= search %>">
             </form>
             <% if (userFound) { %>
                 <p id="username" style="display:none"><%= userFound.username %></p>
@@ -57,14 +57,25 @@
                 <option value="likes">Meiste Likes</option>
               </select>
             <div id="model-list-2">
+                <% if (nothingFound) { %>
+                    <div class="not-found-message">
+                      <p>Keine Modelle gefunden für "<%= search %>".</p>
+                      <a href="/">Zurück zur Startseite</a>
+                    </div>
+                  <% } %>
                 <% models.forEach((model) => { %>
                     <div class="boarderb">
                         <a href="modelldet?id=<%= model.id %>" style="display: block;
                             text-decoration: none; 
                             color: inherit; ">
                             <strong>By: <%= model.userb %></strong>
-                            <img loading="lazy" src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                            style="object-fit: contain; background-color: white;"><br>
+                            <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
+                                <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200"
+                                     style="object-fit: contain; background-color: white;"><br>
+                              <% } else { %>
+                                <img src="/picture/placeholder.png" width="200" height="200"
+                                     style="object-fit: contain; background-color: white;"><br>
+                              <% } %><br>
                             <strong><%= model.name %></strong>
                             <form action="/like" method="get">
                                 <input type="hidden" name="id" value="<%= model.id %>">

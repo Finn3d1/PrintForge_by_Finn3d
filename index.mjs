@@ -159,23 +159,29 @@ app.get('/like', async (req, res) => {
 
 app.get('/download', async (req, res) => {
   const id = parseInt(req.query.id);
+  const file = req.query.file;
 
   const jsonData = await fs.readFile(modellspath, 'utf-8');
   const models = JSON.parse(jsonData);
 
   const model = models.find(m => m.id === id);
-  const filepath = model.dataFile;
   if (!model) {
     return res.status(404).send("Modell nicht gefunden");
   }
 
- 
-    if (!model.download) model.download = 0;
-    model.download += 1;
-    res.download(path.resolve("sites/models/file/"+filepath));
+  // prüfen ob Datei auch zu dem Modell gehört
+  if (!model.dataFiles.includes(file)) {
+    return res.status(404).send("Datei nicht gefunden");
+  }
 
-   
-}); 
+  if (!model.download) model.download = 0;
+  model.download += 1;
+
+  await writeToFile(modellspath, models); // Download-Zähler speichern
+
+  res.download(path.resolve("sites/models/file/" + file));
+});
+
 
 app.post('/index', async (req, res) => {
   const email = req.body.email;
@@ -224,8 +230,8 @@ app.post('/logout', (req, res) => {
 
 
   app.post('/create', upload.fields([
-    { name: 'picture', maxCount: 1 },
-    { name: 'file', maxCount: 1 }
+    { name: 'picture', maxCount: 10 },
+    { name: 'file', maxCount: 10 }
     
   ]), async (req, res) => {
     const name = req.body.name;
@@ -234,8 +240,8 @@ app.post('/logout', (req, res) => {
     const download = 0;
     const like = 0;
   
-    const pictureFile = req.files.picture ? req.files.picture[0].filename : null;
-    const dataFile = req.files.file ? req.files.file[0].filename : null;
+    const pictureFiles = req.files.picture ? req.files.picture.map(file => file.filename) : [];
+    const dataFiles = req.files.file ? req.files.file.map(file => file.filename) : [];
     
     try {
       const fileData = await readFile(modellspath, 'utf-8');
@@ -248,7 +254,7 @@ app.post('/logout', (req, res) => {
       }
       id = id + 1;
   
-      models.push({id , name, description, pictureFile, dataFile , userb ,like, download });
+      models.push({id , name, description, pictureFiles, dataFiles , userb ,like, download });
       await writeToFile(modellspath, models);
  
       res.render(path.resolve("sites/index.ejs"), { models ,userFound: req.session.user || null});
@@ -294,7 +300,12 @@ app.post('/logout', (req, res) => {
         sortedModels.reverse();
       }
   
-      res.render(path.resolve("sites/modells.ejs"), { models: sortedModels,search, userFound: req.session.user || null });
+      res.render(path.resolve("sites/modells.ejs"), { 
+        models: sortedModels,
+        search, 
+        userFound: req.session.user || null,
+        nothingFound: sortedModels.length === 0 
+      });
     } catch (err) {
       console.error(err);
       res.status(500).send("Fehler beim Laden der Modelle");
@@ -335,8 +346,12 @@ app.get('/picture/logo.png', (req, res) => {
     res.sendFile(path.resolve("sites/picture/logo.png"));
   })
 
-app.get('/picture/accounnt.png', (req, res) => {
+  app.get('/picture/accounnt.png', (req, res) => {
     res.sendFile(path.resolve("sites/picture/accounnt.png"));
+  })
+
+  app.get('/picture/banner.png', (req, res) => {
+    res.sendFile(path.resolve("sites/picture/banner.png"));
   })
 
 

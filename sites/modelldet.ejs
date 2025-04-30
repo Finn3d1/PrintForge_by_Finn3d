@@ -54,7 +54,9 @@
   
                 <div class="model-container">
                     <!-- Bild links -->
-                    <img src="/models/file/<%= model.pictureFile %>" class="model-image" alt="Modellbild">
+                    <% model.pictureFiles.forEach(picture => { %>
+                    <img src="/models/file/<%= picture %>" class="model-image" alt="Modellbild">
+                    <% }); %>
                   
                     <!-- Rechts daneben: Name, Download, Likes -->
                     <div class="model-meta">
@@ -85,12 +87,14 @@
           
             <div id="model" class="content"  >
               <h3>Models</h3><br><br>
-              <form action="/download" target="_blank">
-                <input type="hidden" name="id" value="<%= model.id %>">
-                <!--a  href="models/file/<%= model.dataFile %>" download-->
-                  <button id="mdownl" ><%= model.dataFile %></button>
-                <!--/a-->
-              </form>
+              <h3 id="mdownl">Dateien</h3><br>
+              <% model.dataFiles.forEach(file => { %>
+                <form action="/download" method="get" target="_blank" style="display:inline;">
+                  <input type="hidden" name="id" value="<%= model.id %>">
+                  <input type="hidden" name="file" value="<%= file %>">
+                  <button><%= file %></button>
+                </form>
+              <% }); %>
                 
               
             </div>

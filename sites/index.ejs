@@ -49,12 +49,112 @@
         </div>    
     </header>
     <main>
-        <section id="info">
-
+        <section id="info" style="background-image: url('picture/banner.png');">
             <h2 id="Hello">Welcomme to PrintCloud</h2>
             <br>
             <h3 id="Hello2">The best side for 3d Printing 3d Modells</h3>
         </section>
+    
+        <section id="inspiration">
+            <script src="https://js.puter.com/v2/"></script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+  // Pop-up entfernen, falls vorhanden
+  const popup = document.querySelector('putter-dialog');
+  if (popup) {
+    popup.remove(); // Entfernt das Pop-up
+  }
+
+  // Den Link finden, der das Pop-up auslöst und den Button klicken
+  const continueButton = document.getElementById("launch-auth-popup");
+
+  if (continueButton) {
+    // Warte 1 Sekunde und klicke automatisch auf den Button
+    setTimeout(function() {
+      continueButton.click(); // Simuliere einen Klick auf den "Continue"-Button
+    }, 1000); // Warte 1 Sekunde, um sicherzustellen, dass der Button verfügbar ist
+  }
+});
+
+       
+
+
+
+
+            
+            </script>
+            <style>
+              .button-container {
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+                margin-top: 20px;
+              }
+          
+              .button-container form {
+                flex: 1;
+              }
+          
+              .button-container button {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+                cursor: pointer;
+              }
+            </style>
+          
+            <div class="button-container">
+              <!-- 5 Buttons -->
+              <form action="modells">
+                <input type="hidden" name="search" class="hiddenInput">
+                <button type="submit">
+                  <span class="ide">Lade Inspiration…</span>
+                </button>
+              </form>
+          
+              <form action="modells">
+                <input type="hidden" name="search" class="hiddenInput">
+                <button type="submit">
+                  <span class="ide">Lade Inspiration…</span>
+                </button>
+              </form>
+          
+              <form action="modells">
+                <input type="hidden" name="search" class="hiddenInput">
+                <button type="submit">
+                  <span class="ide">Lade Inspiration…</span>
+                </button>
+              </form>
+          
+              <form action="modells">
+                <input type="hidden" name="search" class="hiddenInput">
+                <button type="submit">
+                  <span class="ide">Lade Inspiration…</span>
+                </button>
+              </form>
+          
+              <form action="modells">
+                <input type="hidden" name="search" class="hiddenInput">
+                <button type="submit">
+                  <span class="ide">Lade Inspiration…</span>
+                </button>
+              </form>
+            </div>
+          
+            <script>
+              // Alle Inspirationen laden, wenn die Seite lädt
+              document.querySelectorAll(".button-container form").forEach(form => {
+                let ideSpan = form.querySelector(".ide");
+                let hiddenInput = form.querySelector(".hiddenInput");
+          
+                puter.ai.chat("Nenne mir ein einziges kreatives, veganes, nicht rassistisches und sinnvolles deutsches Stichwort für ein 3D-Druck-Projekt. Es darf nichts mit Vasen, Skulpturen, Schmuck, Lampen oder Schlüsseln zu tun haben. Gib nur ein einzelnes Wort ohne Satz und ohne Anführungszeichen zurück.")
+                  .then(response => {
+                    ideSpan.textContent = response;
+                    hiddenInput.value = response;
+                  });
+              });
+            </script>
+          </section>
         <section id="bestmodell">
             <h3 id="efm">Featured Models</h3>
             <div id="model-list-2">
@@ -64,8 +164,12 @@
                             text-decoration: none; 
                             color: inherit; ">
                             <strong>By: <%= model.userb %></strong>
-                            <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                            style="object-fit: contain; background-color: white;"><br>
+                            <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
+                                <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
+                              <% } else { %>
+                                <img src="/picture/placeholder.png" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
+                              <% } %>
+                         <br>
                             <strong><%= model.name %></strong>
                             <form action="/like" method="get">
                                 <input type="hidden" name="id" value="<%= model.id %>">
@@ -103,8 +207,12 @@
                             text-decoration: none; 
                             color: inherit; ">
                             <strong>By: <%= model.userb %></strong>
-                            <img src="/models/file/<%= model.pictureFile %>" width="200" height="200"
-                            style="object-fit: contain; background-color: white;"><br>
+                            <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
+                                <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
+                              <% } else { %>
+                                <img src="/picture/placeholder.png" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
+                              <% } %>
+                            <br>
                             <strong><%= model.name %></strong>
                             
                             <form action="/like" method="get">
@@ -120,5 +228,9 @@
               </div>
         </section>
     </main>
+    <footer>
+        <p>2025 © Finn3d</p>
+        <a href="">Nutzungsbendingungen </a><a href="">Datenschutzerklärung</a>
+    </footer>
 </body>
 </html>
