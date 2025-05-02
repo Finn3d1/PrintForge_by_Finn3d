@@ -14,8 +14,11 @@
     <% } %>
 </head>
 <body>
+  <script type="module" src="js/model-viewer.js"></script>
     <script src="js/index.js"></script>
     <script src="js/languare.js"></script>
+    
+
     <header>
         <div class="headerb2">
             <select class="headerb" id="lang" onchange="serLanguare()">
@@ -51,12 +54,30 @@
     <main>
         <section>
             <div id="model-list-1">
+              <script type="module">
+                import { showView } from "./js/model-viewer.js";
+                window.showView = showView;
+              </script>
   
                 <div class="model-container">
-                    <!-- Bild links -->
+                 
+                  
+                  <div style="margin-top: 10px;">
+                    <button id="toggleButton" onclick="toggleView()">3D-Modell anzeigen</button>
+                  </div>
+                  
+                  <div id="container3D" data-modelfile="/models/file/<%= model.dataFiles[0] %>" style="display: none;"></div>
+                  <br>
+                  <img id="mainImage" src="/models/file/<%= model.pictureFiles[0] %>" class="model-image" alt="Modellbild" style="width: 400px; height: 400px; object-fit: contain; background-color: white;">
+                  
+                  <div style="margin-top: 10px;">
                     <% model.pictureFiles.forEach(picture => { %>
-                    <img src="/models/file/<%= picture %>" class="model-image" alt="Modellbild">
+                      <img src="/models/file/<%= picture %>" class="thumb-image" alt="Thumbnail"
+                          style="width: 80px; height: 80px; object-fit: cover; margin-right: 5px; cursor: pointer;"
+                          onclick="document.getElementById('mainImage').src='/models/file/<%= picture %>'">
                     <% }); %>
+                  </div>
+                  
                   
                     <!-- Rechts daneben: Name, Download, Likes -->
                     <div class="model-meta">

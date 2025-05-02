@@ -36,8 +36,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());  //endert zu json vormat
 app.use(express.urlencoded({ extended: false })); //macht name in form sichbar
-
 app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file'))); // gibt die modelle frei
+
 // Session Middleware hinzufügen
 app.use(session({
   secret: 'your-secret-key',
@@ -329,9 +329,18 @@ app.get('/comunity', (req, res) => {
     res.sendFile(path.resolve("sites/js/index.js"));
   })
 
-app.get('/js/languare.js', (req, res) => {
-    res.sendFile(path.resolve("sites/js/languare.js"));
+  app.get('/js/main.js', (req, res) => {
+    res.sendFile(path.resolve("sites/js/main.js"));
+  });
+
+  app.get('/js/model-viewer.js', (req, res) => {
+    res.sendFile(path.resolve("sites/js/model-viewer.js"));
   })
+
+
+app.get('/js/languare.js', (req, res) => {
+  res.sendFile(path.resolve("sites/js/languare.js"));
+})
 
 app.get('/main.css', (req, res) => {
     res.sendFile(path.resolve("sites/main.css"));
