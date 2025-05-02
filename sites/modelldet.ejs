@@ -96,10 +96,18 @@
                       </a>
                       <form action="/like" method="get">
                         <input type="hidden" name="id" value="<%= model.id %>">
-                        <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
-                        <p><%= model.like %></p>
-                        <label for="like">👍</label>
                         
+                        <% if (userFound && model.likes && model.likes[userFound.email]) { %> 
+                          <!-- Wenn der Benutzer bereits geliked hat, kann er entliken -->
+                          <input type="radio" name="like" value="off" id="like" onchange="this.form.submit()">
+                          <p><%= model.like %> 👍</p>
+                          <label for="like">Entlike</label>
+                        <% } else { %> 
+                          <!-- Wenn der Benutzer das Modell noch nicht geliked hat -->
+                          <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
+                          <p><%= model.like %> 👍</p>
+                          <label for="like">Like</label>
+                        <% } %>  
                       </form>
                       <label><%= model.download %> ⬇️</label>
                     </div>

@@ -7,3 +7,12 @@ window.switchToImageView = function(imageUrl) {
   const button = document.getElementById('toggleButton');
   if (button) button.innerText = '3D-Modell anzeigen';
 };
+
+
+function logout() {
+  fetch('/logout', { method: 'POST' })
+    .then(() => {
+      localStorage.clear();
+      window.location.href = "/";
+    });
+}

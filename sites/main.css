@@ -192,3 +192,21 @@ form input[type="radio"]:checked + label {
 .model-below button:hover {
   background-color: #267797;
 }
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.button-container form {
+  flex: 1;
+}
+
+.button-container button {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}

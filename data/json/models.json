@@ -18,7 +18,10 @@
       "Finn",
       ""
     ],
-    "like": 0,
-    "download": 0
+    "like": 1,
+    "download": 0,
+    "likes": {
+      "1@1.1": true
+    }
   }
 ]

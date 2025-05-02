@@ -118,24 +118,43 @@ app.post('/createlogin', async (req, res) => {
   try {
     const jsonData = await fs.readFile(userpath, 'utf-8');
     const email = req.body.email;
-    const user = req.body.username;
+    const username = req.body.username;
     const password = req.body.password;
     const users = JSON.parse(jsonData);
-    users.push({ email, user, password });
+
+    // Überprüfen, ob die E-Mail oder der Benutzername bereits existieren
+    const existingUser = users.find(user => user.email === email || user.user === username);
+    if (existingUser) {
+      // Wenn der Benutzer existiert, sende eine Fehlermeldung
+      return res.render(path.resolve("sites/crateaccount.ejs"), { 
+        userFound: null,
+        errorMessage: "E-Mail oder Benutzername bereits vergeben.",
+        email,
+        username 
+      });
+    }
+
+    // Wenn der Benutzer nicht existiert, neuen Benutzer hinzufügen
+    users.push({ email, user: username, password });
     await writeToFile(userpath, users);
- 
 
-
-    res.render(path.resolve("sites/login.ejs"),{userFound: null});
+    // Erfolgreiche Account-Erstellung
+    res.render(path.resolve("sites/login.ejs"), { userFound: null });
   } catch (err) {
     console.error(err);
-    res.status(500).send("Felser beim estellen vom account");
+    res.status(500).send("Fehler beim Erstellen des Accounts");
   }
 });
+
 
 app.get('/like', async (req, res) => {
   const auswahl = req.query.like;
   const id = parseInt(req.query.id);
+
+  // Sicherstellen, dass der Benutzer eingeloggt ist
+  if (!req.session.user) {
+    return res.status(403).send("Du musst eingeloggt sein, um zu liken.");
+  }
 
   const jsonData = await fs.readFile(modellspath, 'utf-8');
   const models = JSON.parse(jsonData);
@@ -145,16 +164,26 @@ app.get('/like', async (req, res) => {
     return res.status(404).send("Modell nicht gefunden");
   }
 
-  if (auswahl === "on") {
-    // Falls noch kein Like-Zähler vorhanden ist, initialisieren
-    if (!model.like) model.like = 0;
-    model.like += 1;
-
-    // Datei speichern
-    await writeToFile(modellspath, models);
+  // Überprüfen, ob der Benutzer das Modell bereits geliked hat
+  if (!model.likes) {
+    model.likes = {}; // Initialisiere das Likes-Objekt, falls nicht vorhanden
   }
 
-  res.render(path.resolve("sites/modelldet.ejs"), { model, id ,userFound: req.session.user || null});
+  if (auswahl === "on") {
+    if (!model.likes[req.session.user.email]) { // Überprüfen, ob der Benutzer es noch nicht gelikt hat
+      model.likes[req.session.user.email] = true;
+      model.like += 1; // Erhöhe den Like-Zähler
+      await writeToFile(modellspath, models);
+    }
+  } else if (auswahl === "off") {
+    if (model.likes[req.session.user.email]) { // Überprüfen, ob der Benutzer es entliken kann
+      delete model.likes[req.session.user.email];
+      model.like -= 1; // Verringere den Like-Zähler
+      await writeToFile(modellspath, models);
+    }
+  }
+
+  res.render(path.resolve("sites/modelldet.ejs"), { model, id, userFound: req.session.user || null });
 });
 
 app.get('/download', async (req, res) => {
@@ -269,8 +298,13 @@ app.post('/logout', (req, res) => {
     res.render(path.resolve("sites/login.ejs"),{userFound: null});
   });
 
-  app.get('/crateaccount', (req, res) => {
-    res.render(path.resolve("sites/crateaccount.ejs"),{userFound: req.session.user || null});
+  app.get('/crateaccount',  (req, res) => {
+    res.render(path.resolve("sites/crateaccount.ejs"), { 
+      userFound: req.session.user || null, 
+      errorMessage: null, 
+      email: '', 
+      username: ''
+    });
   });
   
 

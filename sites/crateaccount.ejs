@@ -45,6 +45,9 @@
             <a class="headera" id="modells" href="modells">Modells</a>
         </div>    
     </header>
+    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+        <p style="color: red;"><%= errorMessage %></p>
+      <% } %>
     <main>
        <form action="/createlogin" method="post">
         <h5>E-Mail</h5>
