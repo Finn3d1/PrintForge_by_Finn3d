@@ -1,23 +1,24 @@
 [
   {
-    "id": 3,
-    "name": "Hallo",
-    "description": "ters",
+    "id": 5,
+    "name": "Test",
+    "description": "Test be",
     "pictureFiles": [
-      "1746041697522-Untitled design.png",
-      "1746041697523-1745773511579-logo(1).png"
+      "1746193728384-Untitled design.png",
+      "1746193728385-1745773511579-logo(1).png"
     ],
     "dataFiles": [
-      "albus-dumbledore.stl",
-      "1746041697505-Bildschirmaufnahme 2025-04-28 um 17.04.02.mov",
-      "1746041697512-Bildschirmaufnahme 2025-04-28 um 17.06.30.mov",
-      "1746041697516-Bildschirmaufnahme 2025-04-28 um 17.09.59.mov"
+      "1746193728343-4x4 Multibin Plate.stl",
+      "1746193728369-mmu3-buttons.3mf",
+      "1746193728369-mmu3-buttons.stl",
+      "1746193728370-1x1x1-Deep - Multibin Simple Drawer.stl",
+      "1746193728371-top-part-without-inserts_0.15mm_PLA_MK3SMMU3_2h25m.gcode"
     ],
     "userb": [
       "Finn",
       ""
     ],
-    "like": 3,
-    "download": 4
+    "like": 0,
+    "download": 0
   }
 ]

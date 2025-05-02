@@ -14,9 +14,13 @@
     <% } %>
 </head>
 <body>
-  <script type="module" src="js/model-viewer.js"></script>
+    <script type="module" src="js/model-viewer.js"></script>
     <script src="js/index.js"></script>
     <script src="js/languare.js"></script>
+    <script type="module">
+      import { showView } from "./js/model-viewer.js";
+      window.showView = showView;
+    </script>
     
 
     <header>
@@ -54,17 +58,12 @@
     <main>
         <section>
             <div id="model-list-1">
-              <script type="module">
-                import { showView } from "./js/model-viewer.js";
-                window.showView = showView;
-              </script>
+              
   
                 <div class="model-container">
                  
                   
-                  <div style="margin-top: 10px;">
-                    <button id="toggleButton" onclick="toggleView()">3D-Modell anzeigen</button>
-                  </div>
+                  
                   
                   <div id="container3D" data-modelfile="/models/file/<%= model.dataFiles[0] %>" style="display: none;"></div>
                   <br>
@@ -74,8 +73,16 @@
                     <% model.pictureFiles.forEach(picture => { %>
                       <img src="/models/file/<%= picture %>" class="thumb-image" alt="Thumbnail"
                           style="width: 80px; height: 80px; object-fit: cover; margin-right: 5px; cursor: pointer;"
-                          onclick="document.getElementById('mainImage').src='/models/file/<%= picture %>'">
+                          onclick="switchToImageView('/models/file/<%= picture %>')">
                     <% }); %>
+                    <div>
+                      <button id="toggleButton" onclick="toggleView()">3D-Modell anzeigen</button>
+                      <select id="modelSelect" onchange="changeModel()" style="display:none; margin-left:10px;">
+                        <% model.dataFiles.forEach(file => { %>
+                          <option value="/models/file/<%= file %>"><%= file %></option>
+                        <% }); %>
+                      </select>
+                    </div>
                   </div>
                   
                   
