@@ -1,6 +1,11 @@
 /* Header Styling */
+:root {
+    --primary-orange: #F26A2C;
+    --dark-charcoal: #1E1E1E;
+    --accent-cyan: #00CFC8;
+}
 header {
-    background-color: #1e2a3a; /* Dunkelblau für professionellen Look */
+    background-color: var(--dark-charcoal); /* Dunkelblau für professionellen Look */
     padding: 20px 0;
     color: white;
     font-family: 'Roboto', sans-serif;
@@ -29,7 +34,7 @@ header {
 }
 
 .headera:hover {
-    color: #ff6f61; /* Sanfter Hover-Effekt */
+    color: var(--primary-orange); /* Sanfter Hover-Effekt */
 }
 
 .aimg {
@@ -40,7 +45,7 @@ header {
 
 /* Sprache Dropdown */
 #lang {
-    background-color: #2b9fc8;
+    background-color: var(--accent-cyan);
     border: none;
     padding: 8px 15px;
     color: white;
@@ -50,12 +55,12 @@ header {
 }
 
 #lang:hover {
-    background-color: #308eb1;
+    background-color: #00b1aa;
 }
 
 /* User Info & Logout Button */
 button {
-    background-color: #ff6f61;
+    background-color: var(--primary-orange);
     border: none;
     padding: 10px 20px;
     color: white;
@@ -66,7 +71,7 @@ button {
 }
 
 button:hover {
-    background-color: #d24c3a;
+    background-color: #c45628;
 }
 
 /* Styling für den "Create" Button */

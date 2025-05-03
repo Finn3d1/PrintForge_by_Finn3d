@@ -1,14 +1,19 @@
 /* Allgemeines Styling für den gesamten Inhalt */
+:root {
+  --primary-orange: #F26A2C;
+  --dark-charcoal: #1E1E1E;
+  --accent-cyan: #00CFC8;
+}
 main {
-  background-color: #f4f4f9; /* Helles Grau für modernen Look */
+  background-color: #2A2A2A;
   padding: 30px 20px;
   font-family: 'Roboto', sans-serif;
-  color: #333;
+  color: white;
 }
 
 /* Button Styling */
 .button {
-  background-color: #ff6f61;
+  background-color: var(--primary-orange);
   border-radius: 25px;
   border: none;
   padding: 15px 30px;
@@ -142,7 +147,7 @@ form input[type="radio"]:checked + label {
 }
 
 .model-meta button {
-  background-color: #308eb1;
+  background-color: var(--accent-cyan);
   border: none;
   padding: 12px 24px;
   border-radius: 5px;
@@ -152,7 +157,7 @@ form input[type="radio"]:checked + label {
 }
 
 .model-meta button:hover {
-  background-color: #267797;
+  background-color: #00b1aa;
 }
 
 .model-meta form {
@@ -178,7 +183,7 @@ form input[type="radio"]:checked + label {
 }
 /* Sektion-Buttons in model-below */
 .model-below button {
-  background-color: #308eb1;
+  background-color: var(--accent-cyan);
   border: none;
   padding: 10px 20px;
   margin: 5px;
@@ -190,7 +195,7 @@ form input[type="radio"]:checked + label {
 }
 
 .model-below button:hover {
-  background-color: #267797;
+  background-color: #00b1aa;
 }
 
 .button-container {
@@ -209,4 +214,28 @@ form input[type="radio"]:checked + label {
   padding: 10px;
   font-size: 16px;
   cursor: pointer;
+}
+
+#info {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px; /* oder mehr/weniger je nach Wunsch */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+#info h2 {
+  font-size: 48px;
+  margin: 0;
+}
+
+#info h3 {
+  font-size: 24px;
+  margin: 10px 0 0 0;
 }

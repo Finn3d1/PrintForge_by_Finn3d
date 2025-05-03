@@ -37,6 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());  //endert zu json vormat
 app.use(express.urlencoded({ extended: false })); //macht name in form sichbar
 app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file'))); // gibt die modelle frei
+app.use('/picture/', express.static(path.join(__dirname, 'sites','picture'))); 
 
 // Session Middleware hinzufügen
 app.use(session({
@@ -385,17 +386,6 @@ app.get('/main.css', (req, res) => {
   })
 
 
-app.get('/picture/logo.png', (req, res) => {
-    res.sendFile(path.resolve("sites/picture/logo.png"));
-  })
-
-  app.get('/picture/accounnt.png', (req, res) => {
-    res.sendFile(path.resolve("sites/picture/accounnt.png"));
-  })
-
-  app.get('/picture/banner.png', (req, res) => {
-    res.sendFile(path.resolve("sites/picture/banner.png"));
-  })
 
 
 
