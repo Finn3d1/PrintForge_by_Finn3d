@@ -240,7 +240,7 @@ app.post('/index', async (req, res) => {
 
       res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user });
     } else {
-      res.render(path.resolve("sites/login.ejs"), { userFound: null });
+      res.render(path.resolve("sites/login.ejs"));
     }
   } catch (err) {
     console.error(err);

@@ -65,12 +65,13 @@
                   <% } %>
                 <% models.forEach((model) => { %>
                     <div class="boarderb">
-                        <a href="modelldet?id=<%= model.id %>" style="display: block;
-                            text-decoration: none; 
-                            color: inherit; ">
+                        
                             <a href="/profile?username=<%= model.userb %>">
                                 <strong>By: <%= model.userb %></strong>
                               </a>
+                              <a href="modelldet?id=<%= model.id %>" style="display: block;
+                                text-decoration: none; 
+                                color: inherit; ">
   
                             <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
                                 <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200"
@@ -85,7 +86,7 @@
                                 <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
                                 <label for="like">👍</label>
                                 <p><%= model.like %></p>
-                            </form><p>10⬇️</p>
+                            </form><p><%= model.download %>⬇️</p>
                         </a>
                     </div>
                 <% }); %>
