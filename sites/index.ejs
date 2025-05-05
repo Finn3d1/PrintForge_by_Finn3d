@@ -22,6 +22,7 @@
                 <option selected>Deutsch</option>
                 <option>Englisch</option>
             </select>
+  
             <form class="headerb" action="modells">
                 <input name="search"  placeholder="Search..." type="search">
             </form>
@@ -50,10 +51,7 @@
         </div>    
     </header>
     <main>
-        <section id="info" style="background-image: url('picture/banner.png');">
-            
-          
-        </section>
+       
     
         <section id="inspiration">
             <script src="https://js.puter.com/v2/"></script>
@@ -111,6 +109,11 @@
                   });
               });
             </script>
+            <br>
+          </section>
+          <section id="info">
+            
+          
           </section>
         <section id="bestmodell">
             <h3 id="efm">Featured Models</h3>
@@ -120,7 +123,11 @@
                         <a href="modelldet?id=<%= model.id %>" style="display: block;
                             text-decoration: none; 
                             color: inherit; ">
-                            <strong>By: <%= model.userb %></strong>
+                          <!-- Beispiel für den Benutzernamen des Erstellers -->
+                            <a href="/profile?username=<%= model.userb %>">
+                              <strong>By: <%= model.userb %></strong>
+                            </a>
+
                             <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
                                 <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
                               <% } else { %>
@@ -155,7 +162,7 @@
                 
             </div>
         </section>
-        <section style="background-color: white;">
+        <section style="background-color: #2A2A2A;">
             <h3 id="newmodells">New Modells</h3>
             <div id="model-list-2" onclick="modelldet()">
                 <% models.slice().reverse().slice(0, 4).forEach(model => { %>
@@ -163,7 +170,10 @@
                         <a href="modelldet?id=<%= model.id %>" style="display: block;
                             text-decoration: none; 
                             color: inherit; ">
-                            <strong>By: <%= model.userb %></strong>
+                            <a href="/profile?username=<%= model.userb %>">
+                              <strong>By: <%= model.userb %></strong>
+                            </a>
+
                             <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
                                 <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
                               <% } else { %>

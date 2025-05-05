@@ -240,7 +240,7 @@ app.post('/index', async (req, res) => {
 
       res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user });
     } else {
-      res.render(path.resolve("sites/login.ejs"));
+      res.render(path.resolve("sites/login.ejs"), { userFound: null });
     }
   } catch (err) {
     console.error(err);
@@ -259,42 +259,76 @@ app.post('/logout', (req, res) => {
 
 
 
-  app.post('/create', upload.fields([
-    { name: 'picture', maxCount: 10 },
-    { name: 'file', maxCount: 10 }
-    
-  ]), async (req, res) => {
-    const name = req.body.name;
-    const description = req.body.description;
-    const userb = req.body.user;
-    const download = 0;
-    const like = 0;
+app.post('/create', upload.fields([
+  { name: 'picture', maxCount: 10 },
+  { name: 'file', maxCount: 10 }
+]), async (req, res) => {
+  const name = req.body.name;
+  const description = req.body.description;
+  const userb = req.body.user;  // Benutzername
+  const download = 0;
+  const like = 0;
+
+  // Hier sicherstellen, dass userb als String gespeichert wird
+  const userbString = Array.isArray(userb) ? userb[0] : userb;
+
+  const pictureFiles = req.files.picture ? req.files.picture.map(file => file.filename) : [];
+  const dataFiles = req.files.file ? req.files.file.map(file => file.filename) : [];
   
-    const pictureFiles = req.files.picture ? req.files.picture.map(file => file.filename) : [];
-    const dataFiles = req.files.file ? req.files.file.map(file => file.filename) : [];
-    
+  try {
+    const fileData = await readFile(modellspath, 'utf-8');
+    let models = [];
+
     try {
-      const fileData = await readFile(modellspath, 'utf-8');
-      let models = [];
+      models = JSON.parse(fileData);
+    } catch {
+      console.warn("Leere oder fehlerhafte JSON – neue Liste.");
+    }
+
+    id = id + 1;
+
+    models.push({ id, name, description, pictureFiles, dataFiles, userb: userbString, like, download });
+    await writeToFile(modellspath, models);
+
+    res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user || null });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Fehler beim Speichern.");
+  }
+});
+
+
+
+  app.get('/profile', async (req, res) => {
+    try {
+      const username = req.query.username;
+      const userData = await fs.readFile(userpath, 'utf-8');
+      const users = JSON.parse(userData);
   
-      try {
-        models = JSON.parse(fileData);
-      } catch {
-        console.warn("Leere oder fehlerhafte JSON – neue Liste.");
+      const user = users.find(u => u.user === username);
+      if (!user) {
+        return res.status(404).send("Benutzer nicht gefunden");
       }
-      id = id + 1;
   
-      models.push({id , name, description, pictureFiles, dataFiles , userb ,like, download });
-      await writeToFile(modellspath, models);
- 
-      res.render(path.resolve("sites/index.ejs"), { models ,userFound: req.session.user || null});
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Fehler beim Speichern.");
+      // Lade die Modelle des Benutzers
+      const jsonData = await fs.readFile(modellspath, 'utf-8');
+      const models = JSON.parse(jsonData);
+      const userModels = models.filter(model => model.userb === username);
+  
+      // Render Profilseite mit den Benutzerinformationen und den Modellen
+      res.render(path.resolve("sites/profile.ejs"), {
+        user,
+        userModels,
+        modelCount: userModels.length,
+        userFound: req.session.user || null
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Fehler beim Laden des Profils");
     }
   });
 
-
+  
   app.get('/login', (req, res) => {
     res.render(path.resolve("sites/login.ejs"),{userFound: null});
   });
