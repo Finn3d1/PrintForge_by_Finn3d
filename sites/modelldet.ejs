@@ -123,6 +123,7 @@
             <button onclick="showContent('model')">Modell</button>
             <button onclick="showContent('besch')">Beschreibung</button>
             <button onclick="showContent('div1')">Weitere Info</button>
+            <button onclick="showContent('makes')">Makes</button>
           
             <div id="model" class="content"  >
               <h3>Models</h3><br><br>
@@ -150,6 +151,53 @@
                 <strong>By: <%= model.userb %></strong>
               </a>
 
+            </div>
+            <div id="makes" class="content">
+              <% if (userFound) { %>
+                <form action="/make" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="id" value="<%= model.id %>"><br>
+                  <input type="file" name="file" accept="image/*"><br>
+                  <strong>Beschreibung</strong><br>
+                  <input type="text" name="description"><br>
+                  <strong>Bewertung</strong><br>
+                  <select name="rating">
+                    <option value="1">★☆☆☆☆ (1)</option>
+                    <option value="2">★★☆☆☆ (2)</option>
+                    <option value="3">★★★☆☆ (3)</option>
+                    <option value="4">★★★★☆ (4)</option>
+                    <option value="5">★★★★★ (5)</option>
+                  </select><br>
+                  <button type="submit">Hochladen</button>
+                </form>
+              <% } %>
+            
+              <h3>Makes</h3>
+            
+              <% if (model.makes && model.makes.length > 0) { %>
+              <div style="display: flex;">
+                  <% model.makes.forEach(make => { %>
+                    <div style="margin-top: 10px; ">
+                      <p><strong><%= make.user %>:</strong> <%= make.description %></p>
+                      <% if (make.image) { %>
+                        <img src="/models/file/<%= make.image %>" style="width: 150px; object-fit: cover;"><br>
+                      <% } %>
+                      <% if (make.rating) { %>
+                        <p>Bewertung:
+                          <% for (let i = 0; i < make.rating; i++) { %>
+                            ★
+                          <% } %>
+                          <% for (let i = make.rating; i < 5; i++) { %>
+                            ☆
+                          <% } %>
+                          (<%= make.rating %>/5)
+                        </p>
+                      <% } %>
+                    </div>
+                  <% }); %>
+                <% } else { %>
+                  <p>Noch keine Makes vorhanden.</p>
+                <% } %>
+              </div>
             </div>
           </section>
           

@@ -44,8 +44,10 @@
             
         </div>  
         <div class="headera2">
-            <img src="picture/logoklein.png" class="headera" style="max-height: 50px; max-width: 50px;">
-            <a class="headera" id="home" href="/">Home</a>
+            
+            <a class="headera"  href="/">
+              <img src="picture/logoklein.png" class="headera" style="max-height: 50px; max-width: 50px;">
+            </a>
             <a class="headera" id="comunity" href="comunity">Comunity</a>
             <a class="headera" id="modells" href="modells">Modells</a>
         </div>    
@@ -97,16 +99,15 @@
             </div>
           
             <script>
-              // Alle Inspirationen laden, wenn die Seite lädt
-              document.querySelectorAll(".button-container form").forEach(form => {
-                let ideSpan = form.querySelector(".ide");
-                let hiddenInput = form.querySelector(".hiddenInput");
-          
-                puter.ai.chat("Nenne mir ein einziges kreatives, veganes, nicht rassistisches und sinnvolles deutsches Stichwort für ein 3D-Druck-Projekt. Es darf nichts mit Vasen, Skulpturen, Schmuck, Lampen oder Schlüsseln zu tun haben. Gib nur ein einzelnes Wort ohne Satz und ohne Anführungszeichen zurück.")
-                  .then(response => {
-                    ideSpan.textContent = response;
-                    hiddenInput.value = response;
-                  });
+             document.querySelectorAll(".button-container form").forEach(form => {
+              let ideSpan = form.querySelector(".ide");
+              let hiddenInput = form.querySelector(".hiddenInput");
+
+              puter.wt.chat("Nenne mir ein einziges kreatives, veganes, nicht rassistisches und sinnvolles deutsches Stichwort für ein 3D-Druck-Projekt. Es darf nichts mit Vasen, Skulpturen, Schmuck, Lampen oder Schlüsseln zu tun haben. Gib nur ein einzelnes Wort ohne Satz und ohne Anführungszeichen zurück.")
+                .then(response => {
+                  ideSpan.textContent = response;
+                  hiddenInput.value = response;
+                });
               });
             </script>
             <br>

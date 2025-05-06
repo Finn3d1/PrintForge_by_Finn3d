@@ -187,6 +187,42 @@ app.get('/like', async (req, res) => {
   res.render(path.resolve("sites/modelldet.ejs"), { model, id, userFound: req.session.user || null });
 });
 
+
+app.post('/make', upload.single('file'), async (req, res) => {
+  const id = parseInt(req.body.id);
+  const description = req.body.description;
+  const rating = parseInt(req.body.rating);
+
+  if (!req.session.user) {
+    return res.status(403).send("Du musst eingeloggt sein, um ein Make zu erstellen.");
+  }
+
+  const jsonData = await fs.readFile(modellspath, 'utf-8');
+  const models = JSON.parse(jsonData);
+
+  const model = models.find(m => m.id === id);
+  if (!model) {
+    return res.status(404).send("Modell nicht gefunden");
+  }
+
+  if (!model.makes) {
+    model.makes = [];
+  }
+
+  const imagePath = req.file ? req.file.filename : null;
+
+  model.makes.push({
+    user: req.session.user.username,
+    description: description,
+    image: imagePath,
+    rating: rating
+  });
+
+  await writeToFile(modellspath, models);
+
+  res.render(path.resolve("sites/modelldet.ejs"), { model, id, userFound: req.session.user || null });
+});
+
 app.get('/download', async (req, res) => {
   const id = parseInt(req.query.id);
   const file = req.query.file;
