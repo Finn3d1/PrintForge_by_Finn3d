@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -56,7 +57,7 @@
        
     
         <section id="inspiration">
-            <script src="https://js.puter.com/v2/"></script>
+            
           
             
           
@@ -99,17 +100,35 @@
             </div>
           
             <script>
-             document.querySelectorAll(".button-container form").forEach(form => {
-              let ideSpan = form.querySelector(".ide");
-              let hiddenInput = form.querySelector(".hiddenInput");
-
-              puter.wt.chat("Nenne mir ein einziges kreatives, veganes, nicht rassistisches und sinnvolles deutsches Stichwort für ein 3D-Druck-Projekt. Es darf nichts mit Vasen, Skulpturen, Schmuck, Lampen oder Schlüsseln zu tun haben. Gib nur ein einzelnes Wort ohne Satz und ohne Anführungszeichen zurück.")
-                .then(response => {
-                  ideSpan.textContent = response;
-                  hiddenInput.value = response;
+              document.querySelectorAll(".button-container form").forEach(form => {
+                let ideSpan = form.querySelector(".ide");
+                let hiddenInput = form.querySelector(".hiddenInput");
+            
+                // Beispiel für eine API-Anfrage an einen freien Chatbot (z. B. OpenAI oder ein anderes API)
+                fetch('https://api.openai.com/v1/completions', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer YOUR_API_KEY' // Ersetze 'YOUR_API_KEY' mit deinem API-Schlüssel
+                  },
+                  body: JSON.stringify({
+                    model: 'text-davinci-003',  // Ersetze durch das Modell deiner Wahl
+                    prompt: 'Nenne mir ein einziges kreatives, veganes, nicht rassistisches und sinnvolles deutsches Stichwort für ein 3D-Druck-Projekt. Es darf nichts mit Vasen, Skulpturen, Schmuck, Lampen oder Schlüsseln zu tun haben. Gib nur ein einzelnes Wort ohne Satz und ohne Anführungszeichen zurück.',
+                    max_tokens: 10
+                  })
+                })
+                .then(response => response.json())
+                .then(data => {
+                  ideSpan.textContent = data.choices[0].text.trim();  // Text aus der API-Antwort verwenden
+                  hiddenInput.value = data.choices[0].text.trim();   // Wert für das versteckte Input-Feld setzen
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  ideSpan.textContent = 'Fehler beim Abrufen der Inspiration';
                 });
               });
             </script>
+            
             <br>
           </section>
           <section id="info">
@@ -123,9 +142,12 @@
                     <div class="boarderb">
                        
                           <!-- Beispiel für den Benutzernamen des Erstellers -->
-                            <a href="/profile?username=<%= model.userb %>">
-                              <strong>By: <%= model.userb %></strong>
-                            </a>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                              <img src="/picture/profiles/<%= model.profilePic || 'default.png' %>" alt="Profilbild" class="profilbild-mini">
+                              <a href="/profile?username=<%= model.userb %>">
+                                <strong>By: <%= model.userb %></strong>
+                              </a>
+                            </div>
                             <a href="modelldet?id=<%= model.id %>" style="display: block;
                               text-decoration: none; 
                               color: inherit; ">
@@ -170,9 +192,12 @@
                 <% models.slice().reverse().slice(0, 4).forEach(model => { %>
                     <div class="boarderb">
                       
-                            <a href="/profile?username=<%= model.userb %>">
-                              <strong>By: <%= model.userb %></strong>
-                            </a>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                              <img src="/picture/profiles/<%= model.profilePic || 'default.png' %>" alt="Profilbild" class="profilbild-mini">
+                              <a href="/profile?username=<%= model.userb %>">
+                                <strong>By: <%= model.userb %></strong>
+                              </a>
+                            </div>
                             <a href="modelldet?id=<%= model.id %>" style="display: block;
                               text-decoration: none; 
                               color: inherit; ">

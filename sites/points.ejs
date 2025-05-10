@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrintForge</title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="icon" type="image/x-icon" href="picture/logo.png">
+    <% if (userFound) { %>
+        <p id="username" style="display:none"><%= userFound.user %></p>
+        <p id="pas" style="display:none"><%= userFound.password %></p>
+        <p id="email" style="display:none"><%= userFound.email %></p>
+    <% } %>
+</head>
+<body>
+    <script src="js/index.js"></script>
+    <script src="js/languare.js"></script>
+    <header>
+        <div class="headerb2">
+            <select class="headerb" id="lang" onchange="serLanguare()">
+                <option selected>Deutsch</option>
+                <option>Englisch</option>
+            </select>
+  
+            <form class="headerb" action="modells">
+                <input name="search"  placeholder="Search..." type="search">
+            </form>
+            <% if (userFound) { %>
+                <p id="username" style="display:none"><%= userFound.username %></p>
+                <p id="email" style="display:none"><%= userFound.email %></p>
+                <p id="pas" style="display:none"><%= userFound.password %></p>
+                <p>Hallo, <%= userFound.username %></p>
+                <button onclick="logout()">Logout</button>
+                <a href="cratemodell">
+                    <button class="headerb">Erstellen</button>
+                </a>
+            <% } else { %>
+                <a class="headerb" href="login">
+                    <img class="aimg" src="/picture/accounnt.png" alt="">
+                </a>
+            <% } %>
+            
+            
+        </div>  
+        <div class="headera2">
+            
+            <a class="headera"  href="/">
+              <img src="picture/logoklein.png" class="headera" style="max-height: 50px; max-width: 50px;">
+            </a>
+            <a class="headera" id="comunity" href="comunity">Comunity</a>
+            <a class="headera" id="modells" href="modells">Modells</a>
+        </div>    
+    </header>
+    <main>
+        <% if (userFound) { %>
+            <h1>Deine Punkte: <%= userFound.point %></h1>
+        <% } else { %>
+            <p>Du musst eingeloggt sein, um deine Punkte zu sehen.</p>
+        <% } %>
+    </main>
+    <footer>
+        <p>2025 © Finn3d</p>
+        <a href="">Nutzungsbendingungen </a><a href="">Datenschutzerklärung</a>
+    </footer>
+</body>
+</html>

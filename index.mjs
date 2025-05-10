@@ -68,7 +68,17 @@ const storage = multer.diskStorage({
   }
 });
 
+const profileStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, 'sites', 'picture', 'profiles'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
 const upload = multer({ storage: storage });
+const profileUpload = multer({ storage: profileStorage });
 
 
 async function initId() { // sorgt das id immer so groß ist wie die anzal der modelle
@@ -115,13 +125,14 @@ app.get('/crateaccount',  (req, res) => {
   res.render(path.resolve("sites/crateaccount.ejs"),{userFound: req.session.user || null});
 });
 
-app.post('/createlogin', async (req, res) => {
+app.post('/createlogin', profileUpload.single('profilePic'), async (req, res) => {
   try {
     const jsonData = await fs.readFile(userpath, 'utf-8');
     const email = req.body.email;
     const username = req.body.username;
     const password = req.body.password;
     const users = JSON.parse(jsonData);
+    const profilePic = req.file ? req.file.filename : null;
 
     // Überprüfen, ob die E-Mail oder der Benutzername bereits existieren
     const existingUser = users.find(user => user.email === email || user.user === username);
@@ -136,7 +147,7 @@ app.post('/createlogin', async (req, res) => {
     }
 
     // Wenn der Benutzer nicht existiert, neuen Benutzer hinzufügen
-    users.push({ email, user: username, password });
+    users.push({ email, user: username, password, profilePic });
     await writeToFile(userpath, users);
 
     // Erfolgreiche Account-Erstellung
@@ -271,7 +282,8 @@ app.post('/index', async (req, res) => {
       req.session.user = {
         email: userFound.email,
         username: userFound.user,
-        password: userFound.password
+        password: userFound.password,
+        point: userFound.point || 0
       };
 
       res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user });
@@ -313,17 +325,35 @@ app.post('/create', upload.fields([
   
   try {
     const fileData = await readFile(modellspath, 'utf-8');
+    const userData = await readFile(userpath, 'utf-8');
     let models = [];
+    let user = [];
 
     try {
       models = JSON.parse(fileData);
+      user = JSON.parse(userData);
     } catch {
       console.warn("Leere oder fehlerhafte JSON – neue Liste.");
+    }
+
+    const userdet = user.find(m => m.user === userb);
+    if (!userdet) {
+      return res.status(404).send("Benutzer nicht gefunden");
+    }
+
+    if (typeof userdet.point !== 'number') {
+      userdet.point = 0;
+    }
+    userdet.point += 10;
+    if (req.session.user && req.session.user.username === userb) {
+      req.session.user.point = userdet.point;
     }
 
     id = id + 1;
 
     models.push({ id, name, description, pictureFiles, dataFiles, userb: userbString, like, download });
+
+    await writeToFile(userpath, user);
     await writeToFile(modellspath, models);
 
     res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user || null });
@@ -345,16 +375,35 @@ app.post('/create', upload.fields([
       if (!user) {
         return res.status(404).send("Benutzer nicht gefunden");
       }
-  
-      // Lade die Modelle des Benutzers
-      const jsonData = await fs.readFile(modellspath, 'utf-8');
-      const models = JSON.parse(jsonData);
-      const userModels = models.filter(model => model.userb === username);
-  
+       // Lade die Modelle des Benutzers
+       const jsonData = await fs.readFile(modellspath, 'utf-8');
+       const models = JSON.parse(jsonData);
+       const userModels = models.filter(model => model.userb === username);
+   
+      // Alle Makes des Benutzers sammeln
+    const userMakes = [];
+
+    models.forEach(model => {
+      if (model.makes) {
+        const makesByUser = model.makes
+          .filter(make => make.user === username)
+          .map(make => ({
+            ...make,
+            modelName: model.name,
+            modelId: model.id
+          }));
+
+        userMakes.push(...makesByUser);
+      }
+    });
+
+
+     
       // Render Profilseite mit den Benutzerinformationen und den Modellen
       res.render(path.resolve("sites/profile.ejs"), {
         user,
         userModels,
+        userMakes,
         modelCount: userModels.length,
         userFound: req.session.user || null
       });
@@ -419,7 +468,15 @@ app.post('/create', upload.fields([
 
 
 
-app.get('/comunity', (req, res) => {
+  app.get('/points', (req, res) => {
+
+      res.render(path.resolve("sites/points.ejs"),{userFound: req.session.user || null});
+
+   
+
+  })
+
+  app.get('/comunity', (req, res) => {
     res.render(path.resolve("sites/comunity.ejs"),{userFound: req.session.user || null});
   })
  

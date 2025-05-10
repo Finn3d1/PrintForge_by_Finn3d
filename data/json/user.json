@@ -1,12 +1,9 @@
 [
   {
-    "email": "1@1.1",
-    "user": "Finn",
-    "password": "1234"
-  },
-  {
-    "email": "f@f.f",
+    "email": "fff@fff.fff",
     "user": "fff",
-    "password": "fff"
+    "password": "fff",
+    "profilePic": "1746556387678-images.jpeg",
+    "point": 20
   }
 ]

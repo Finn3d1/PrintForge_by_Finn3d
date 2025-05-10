@@ -51,39 +51,93 @@
         </div>    
     </header>
     <main>
+      <div class="tab-buttons">
+        <button onclick="showContent('modelle-content')">Modelle</button>
+        <button onclick="showContent('makes-content')">Makes</button>
+      </div>
         <h2>Profil von <%= user.user %></h2>
+        <% if (user.profilePic) { %>
+          <img src="/picture/profiles/<%= user.profilePic %>" alt="Profilbild" class="profilbild">
+        <% } else { %>
+          <img src="/picture/profiles/default.png" alt="Standard Profilbild" class="profilbild">
+        <% } %>
         <p>Modelle: <%= modelCount %></p>
         
-        <h3>Erstellte Modelle:</h3>
-        <div id="model-list-2">
-          <% userModels.forEach(model => { %>
-            <div class="boarderb">
-                <a href="modelldet?id=<%= model.id %>" style="display: block;
-                    text-decoration: none; 
-                    color: inherit; ">
-                    <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
-                        <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
-                      <% } else { %>
-                        <img src="/picture/placeholder.png" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
-                      <% } %>
-                    <br>
-                    <strong><%= model.name %></strong>
-                    
-                    <form action="/like" method="get">
-                        <input type="hidden" name="id" value="<%= model.id %>">
-                        <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
-                        <label for="like">👍</label>
-                        <p><%= model.like %></p>
-                    </form><p>10⬇️</p>
-                </a>
-            </div>
-          <% }) %>
+        <div class="content active" id="modelle-content">
+          <h3>Erstellte Modelle:</h3>
+          <div id="model-list-2">
+            <% userModels.forEach(model => { %>
+              <div class="boarderb">
+                  <a href="modelldet?id=<%= model.id %>" style="display: block;
+                      text-decoration: none; 
+                      color: inherit; ">
+                      <% if (model.pictureFiles && model.pictureFiles.length > 0) { %>
+                          <img src="/models/file/<%= model.pictureFiles[0] %>" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
+                        <% } else { %>
+                          <img src="/picture/placeholder.png" width="200" height="200" style="object-fit: contain; background-color: white;"><br>
+                        <% } %>
+                      <br>
+                      <strong><%= model.name %></strong>
+                      
+                      <form action="/like" method="get">
+                          <input type="hidden" name="id" value="<%= model.id %>">
+                          <input type="radio" name="like" value="on" id="like" onchange="this.form.submit()">
+                          <label for="like">👍</label>
+                          <p><%= model.like %></p>
+                      </form><p>10⬇️</p>
+                  </a>
+              </div>
+            <% }) %>
+          </div>
         </div>
+        <div class="content" id="makes-content">
+            <h3>Meine Makes:</h3>
+            <% if (userMakes.length > 0) { %>
+            <div style="display: flex;">
+                <% userMakes.forEach(make => { %>
+                  <div style="margin-top: 10px;">
+                    <strong>Modell:</strong> <%= make.modelName %> <br>
+                    <strong>Beschreibung:</strong> <%= make.description %><br>
+                    <% if (make.rating) { %>
+                        <p>Bewertung:
+                        <% for (let i = 0; i < make.rating; i++) { %>
+                            ★
+                        <% } %>
+                        <% for (let i = make.rating; i < 5; i++) { %>
+                            ☆
+                        <% } %>
+                        (<%= make.rating %>/5)
+                        </p>
+                    <% } %>
+                    <% if (make.image) { %>
+                      <img src="/models/file/<%= make.image %>" alt="Make Bild" class="make-image"><br>
+                    <% } %>
+                    </div>
+                    
+                <% }) %>
+                </div>
+             
+            <% } else { %>
+              <p>Keine Makes gefunden.</p>
+            <% } %>
+        
+
       </main>
       
     <footer>
         <p>2025 © Finn3d</p>
         <a href="">Nutzungsbendingungen </a><a href="">Datenschutzerklärung</a>
     </footer>
+<script>
+  function showContent(id) {
+    const contents = document.querySelectorAll('.content');
+    contents.forEach(div => div.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+
+    const buttons = document.querySelectorAll('.tab-buttons button');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`.tab-buttons button[onclick="showContent('${id}')"]`).classList.add('active');
+  }
+</script>
 </body>
 </html>

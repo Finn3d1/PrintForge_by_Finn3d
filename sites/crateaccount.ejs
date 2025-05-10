@@ -49,7 +49,7 @@
         <p style="color: red;"><%= errorMessage %></p>
       <% } %>
     <main>
-       <form action="/createlogin" method="post">
+       <form action="/createlogin" method="post" enctype="multipart/form-data">
         <h5>E-Mail</h5>
         <input type="email" name="email">
         <br>
@@ -57,6 +57,8 @@
         <input type="password" name="password">
         <h5>Benutzernsme</h5>
         <input type="text" name="username">
+        <h5>Profilbild</h5>
+        <input type="file" name="profilePic" accept="image/*">
         <button>Anmelden</button>
        </form>
        <a href="login">Ich habe schon ein Account</a>

@@ -259,3 +259,35 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+.profilbild {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+.profilbild-mini {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ccc;
+}
+.content {
+  display: none;
+}
+
+
+.content.active {
+  display: block;
+}
+
+.tab-buttons button.active {
+  background-color: var(--accent-cyan);
+  color: #fff;
+}
+
+.make-image {
+  max-width: 30%;
+  max-height: 30%;
+}
