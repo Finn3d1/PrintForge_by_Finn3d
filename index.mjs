@@ -37,6 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());  //endert zu json vormat
 app.use(express.urlencoded({ extended: false })); //macht name in form sichbar
 app.use('/models/file/', express.static(path.join(__dirname, 'sites','models','file'))); // gibt die modelle frei
+app.use('/picture/profiles/', express.static(path.join(__dirname, 'sites','picture','profiles'))); // gibt die bilder frei
 app.use('/picture/', express.static(path.join(__dirname, 'sites','picture'))); 
 
 // Session Middleware hinzufügen
@@ -96,10 +97,17 @@ async function initId() { // sorgt das id immer so groß ist wie die anzal der m
 app.get('/', async (req, res) => {
   try {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
+    const userData = await fs.readFile(userpath, 'utf-8');
     const models = JSON.parse(jsonData);
+    const users = JSON.parse(userData);
 
+    // Füge jedem Modell das Profilbild hinzu
+    models.forEach(model => {
+      const user = users.find(u => u.user === model.userb);
+      model.profilePic = user ? user.profilePic : null;
+    });
 
-    res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user || null});
+    res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user || null });
   } catch (err) {
     console.error(err);
     res.status(500).send("Fehler beim Laden der Modelle");
@@ -263,18 +271,13 @@ app.get('/download', async (req, res) => {
 app.post('/index', async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  let models = [];
+
   try {
     const jsonData = await fs.readFile(modellspath, 'utf-8');
-    models = JSON.parse(jsonData);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Fehler beim Laden der Modelle");
-    return;
-  }
-  try {
     const userData = await fs.readFile(userpath, 'utf-8');
+    let models = JSON.parse(jsonData);
     const users = JSON.parse(userData);
+
     const userFound = users.find(u => u.email === email && u.password === password);
 
     if (userFound) {
@@ -283,16 +286,23 @@ app.post('/index', async (req, res) => {
         email: userFound.email,
         username: userFound.user,
         password: userFound.password,
-        point: userFound.point || 0
+        point: userFound.point || 0,
+        profilePic: userFound.profilePic
       };
+
+      // Profilbilder den Modellen hinzufügen
+      models.forEach(model => {
+        const user = users.find(u => u.user === model.userb);
+        model.profilePic = user ? user.profilePic : null;
+      });
 
       res.render(path.resolve("sites/index.ejs"), { models, userFound: req.session.user });
     } else {
-      res.render(path.resolve("sites/login.ejs"));
+      res.render(path.resolve("sites/login.ejs"), { userFound: null });
     }
   } catch (err) {
     console.error(err);
-    res.status(500).send("Fehler beim Überprüfen der Benutzer");
+    res.status(500).send("Fehler beim Laden der Daten");
   }
 });
 
@@ -434,7 +444,7 @@ app.post('/create', upload.fields([
       const search = (req.query.search || '').toLowerCase(); // Suchbegriff klein schreiben für Vergleich
       const jsonData = await fs.readFile(modellspath, 'utf-8');
       let models = JSON.parse(jsonData);
-  
+
       // Wenn ein Suchbegriff vorhanden ist, filtern
       if (search) {
         models = models.filter(m => 
@@ -442,7 +452,7 @@ app.post('/create', upload.fields([
           (m.description && m.description.toLowerCase().includes(search))
         );
       }
-  
+
       // Sortieren
       let sortedModels = [...models];
       if (sort === 'oldest') {
@@ -453,10 +463,11 @@ app.post('/create', upload.fields([
         // newest
         sortedModels.reverse();
       }
-  
+
       res.render(path.resolve("sites/modells.ejs"), { 
         models: sortedModels,
-        search, 
+        search,
+        sort,
         userFound: req.session.user || null,
         nothingFound: sortedModels.length === 0 
       });

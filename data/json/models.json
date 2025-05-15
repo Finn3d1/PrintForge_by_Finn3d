@@ -80,7 +80,10 @@
       "1746731845869-6x6 Multiboard Core Tile.stl"
     ],
     "userb": "fff",
-    "like": 0,
-    "download": 0
+    "like": 1,
+    "download": 0,
+    "likes": {
+      "fff@fff.fff": true
+    }
   }
 ]

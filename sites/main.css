@@ -1,3 +1,7 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
 /* Allgemeines Styling für den gesamten Inhalt */
 :root {
   --primary-orange: #F26A2C;
@@ -290,4 +294,50 @@ footer a:hover {
 .make-image {
   max-width: 30%;
   max-height: 30%;
+}
+.menu {
+  background-color: #333;
+  width: 200px;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 0;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+/* Profile dropdown opens to the left to stay within viewport */
+#menu {
+  right: 0;
+  left: auto;
+}
+.menu button {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.menu button {
+  padding: 10px;
+  border-bottom: 1px solid #444;
+  cursor: pointer;
+}
+.menu button:hover {
+  background-color: #444;
+}
+.create-button {
+  background-color: #6a6a6a;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  max-width: 10%;
+}
+.create-button:hover {
+  background-color: #888;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
 }

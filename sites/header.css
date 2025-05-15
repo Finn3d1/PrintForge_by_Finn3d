@@ -9,6 +9,11 @@ header {
     padding: 20px 0;
     color: white;
     font-family: 'Roboto', sans-serif;
+    position: fixed; /* Macht den Header an der Position kleben */
+    margin-left: 0.2%; 
+    margin-right: 0.2%;
+    width: 100%; /* Vollständige Breite */
+    z-index: 1000; /* Optional: Z-Index, um sicherzustellen, dass der Header über anderen Elementen liegt */
 }
 
 /* Header Navigation */

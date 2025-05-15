@@ -24,36 +24,48 @@
     
 
     <header>
-        <div class="headerb2">
-            <select class="headerb" id="lang" onchange="serLanguare()">
-                <option selected>Deutsch</option>
-                <option>Englisch</option>
-            </select>
-            <form class="headerb" action="modells">
-                <input name="search"  placeholder="Search..." type="search">
-            </form>
-            <% if (userFound) { %>
-                <p id="username" style="display:none"><%= userFound.username %></p>
-                <p id="email" style="display:none"><%= userFound.email %></p>
-                <p id="pas" style="display:none"><%= userFound.password %></p>
-                <p>Hallo, <%= userFound.username %></p>
-                <button onclick="logout()">Logout</button>
+      <div class="headerb2">
+          <select class="headerb" id="lang" onchange="serLanguare()">
+              <option selected>Deutsch</option>
+              <option>Englisch</option>
+          </select>
+          <form class="headerb" action="modells">
+              <input name="search" placeholder="Search..." type="search">
+          </form>
+          <% if (userFound) { %>
+              <div class="dropdown">
+                <div class="profile-button" onclick="toggleMenu('menu')" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                  <img src="/picture/profiles/<%= userFound.profilePic %>" alt="Profilbild" class="profilbild-mini">
+                </div>
+                <div class="menu" id="menu">
+                  <a href="points"><button class="headera">Punkte</button></a>
+                  <a href="/profile?username=<%= userFound.username %>"><button class="headera">Profil</button></a>
+                  <button onclick="logout()" class="headera">Logout</button>
+                </div>
+              </div>
+          <% } else { %>
+              <a class="headerb" href="login">
+                  <img class="aimg" src="/picture/accounnt.png" alt="">
+              </a>
+          <% } %>
+      </div>  
+      <div class="headera2">
+          <a class="headera" href="/">
+              <img src="picture/logoklein.png" class="headera" style="max-height: 50px; max-width: 50px;">
+          </a>
+          <a class="headera" id="comunity" href="comunity">Comunity</a>
+          <a class="headera" id="modells" href="modells">Modells</a>
+          <% if (userFound) { %>
+            <div class="dropdown">
+              <button class="create-button" onclick="toggleMenu('createMenu')">Erstellen</button>
+              <div class="menu" id="createMenu">
                 <a href="cratemodell">
-                    <button class="headerb">Erstellen</button>
+                  <button class="headera">Model</button>
                 </a>
-            <% } else { %>
-                <a class="headerb" href="login">
-                    <img class="aimg" src="/picture/accounnt.png" alt="">
-                </a>
-            <% } %>
-            
-            
-        </div>  
-        <div class="headera2">
-            <a class="headera" id="home" href="/">Home</a>
-            <a class="headera" id="comunity" href="comunity">Comunity</a>
-            <a class="headera" id="modells" href="modells">Modells</a>
-        </div>    
+              </div>
+            </div>
+          <% } %>
+      </div>    
     </header>
     <main>
         <section>
